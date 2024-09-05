@@ -22,7 +22,7 @@
 		{/if}
 		<td>
 			<a href="/triggerActivity/{$smarty.section.all.index}" class="button">Trigger</a><br>
-			{if $activities[all].triggers|count > 0}<a href="/statsActivity/{$smarty.section.all.index}">Stats</a>{/if}
+			{if $activities[all].triggers|count > 1}<a href="/statsActivity/{$smarty.section.all.index}">Stats</a>{/if}
 			<a href="/editActivity/{$smarty.section.all.index}">Edit</a>
 			<a href="#" onclick="confirmRedirect('/deleteActivity/{$smarty.section.all.index}'); return false;">Delete</a>
 		</td>

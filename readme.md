@@ -46,7 +46,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-My electric toothbrush seems to be running out of charge quicker and quicker but is it or am I just misremembering when I last charged it? WDiL aims to help solve those sort of problems by allowing you to record every time you do something and then see stats on things such as frequency and average interval. 
+My electric toothbrush seems to be running out of charge quicker and quicker but is it or am I just misremembering when I last charged it? WDiL aims to help solve those sorts of problems by allowing you to record every time you do something and then see stats on things such as frequency and average interval. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
