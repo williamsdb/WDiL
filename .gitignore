@@ -1,0 +1,12 @@
+.DS_Store
+composer.json
+composer.lock
+activities.db
+logs.db
+/src/bin
+/src/config.php
+/src/templates_c/*
+/src/vendor
+/src/test.php
+SEODash-1.0.0
+SEODash-1.0.0.zip

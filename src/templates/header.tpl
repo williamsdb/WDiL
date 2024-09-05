@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	{if $redirect != ''}
+		<meta http-equiv="refresh" content="{$redirect}; url={$url}" />
+	{/if}
+
+	<!-- Title and other stuffs -->
+	<title>WDiL?</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<meta name="author" content="Neil Thompson">
+
+	<!-- Stylesheet -->
+	<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+
+	<!-- Favicon -->
+	<link rel="shortcut icon" type="image/png" href="{$smarty.const.SITE_URL}/img/favicon.png">
+	<link rel="apple-touch-icon" href="{$smarty.const.SITE_URL}/img/favicon.png">
+
+</head>
+
+<body>
+
+    <header>
+        <h1><a href="/">WDIL</a></h1>
+    </header>
+
+    <main>
+        <!-- Main content goes here -->
+		{if $error != ''}
+			<p><mark>{$error}</mark></p>
+		{/if}
