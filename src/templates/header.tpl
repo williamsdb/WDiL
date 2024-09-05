@@ -26,7 +26,7 @@
 <body>
 
     <header>
-        <h1><a href="/">WDIL</a></h1>
+        <h1><a href="/">WDiL?</a></h1>
     </header>
 
     <main>
