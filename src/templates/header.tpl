@@ -27,6 +27,12 @@
 
     <header>
         <h1><a href="/">WDiL?</a></h1>
+		{if $smarty.session.database|isset}
+		<nav>
+			<a href="/">Home</a>
+			<a href="/logout">Logout</a>
+		</nav>
+		{/if}
     </header>
 
     <main>

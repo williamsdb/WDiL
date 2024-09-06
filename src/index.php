@@ -293,6 +293,7 @@ switch ($cmd) {
         break;
 
     case 'logout':
+        unset($_SESSION['database']);
         session_destroy();
         $smarty->display('login.tpl');
         break;
