@@ -42,20 +42,6 @@ $smarty->setCacheDir('cache');
 $smarty->setConfigDir('configs');
 $smarty->registerPlugin("modifier", "date_format_tz", "smarty_modifier_date_format_tz");
 
-// set database
-$database = 'williamsdb.db';
-
-// get the existing activities
-if (empty($_SESSION['activities'])) {
-    $_SESSION['activities'] = readactivities($database);
-}
-
-// any error or information messages
-if (!empty($_SESSION['error'])) {
-    $smarty->assign('error', $_SESSION['error']);
-    unset($_SESSION['error']);
-}
-
 // Get the current path from the requested URL
 $current_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
@@ -72,6 +58,18 @@ if (isset($path_segments[1])){
 }
 if (isset($path_segments[2])){
     $act = $path_segments[2];
+}
+
+// are we logged in?
+If (!isset($_SESSION['database']) && $cmd != 'login' &&  $cmd != 'loginUser' && $cmd != 'register' &&  $cmd != 'registerUser'){
+    Header('Location: /login');
+    die;
+}
+
+// any error or information messages
+if (!empty($_SESSION['error'])) {
+    $smarty->assign('error', $_SESSION['error']);
+    unset($_SESSION['error']);
 }
 
 // execute command
@@ -137,7 +135,7 @@ switch ($cmd) {
         }
 
         // store the activities in the activities database file
-        writeActivities($_SESSION['activities'], $database);
+        writeActivities($_SESSION['activities'], $_SESSION['database']);
         $i = count($_SESSION['activities'])-1;
 
         // Redirect to the relevant page
@@ -158,7 +156,7 @@ switch ($cmd) {
         $_SESSION['activities'][$id]['activityName'] = $_REQUEST['activityName'];
 
         // store the activities in the activities database file
-        writeActivities($_SESSION['activities'], $database);
+        writeActivities($_SESSION['activities'], $_SESSION['database']);
 
         // Redirect to the relevant page
         $_SESSION['error'] = 'Activity updated';
@@ -172,7 +170,7 @@ switch ($cmd) {
         $_SESSION['activities'][$id]['triggers'][$i]['timestamp'] = time();
 
         // store the activities in the activities database file
-        writeActivities($_SESSION['activities'], $database);
+        writeActivities($_SESSION['activities'], $_SESSION['database']);
 
         // Redirect to the relevant page
         $_SESSION['error'] = 'Activity triggered';
@@ -187,7 +185,7 @@ switch ($cmd) {
         $_SESSION['activities'] = array_values($_SESSION['activities']);
 
         // store the activities in the activities database file
-        writeActivities($_SESSION['activities'], $database);
+        writeActivities($_SESSION['activities'], $_SESSION['database']);
 
         $smarty->assign('error', 'Activity deleted');
         $smarty->assign('activities', $_SESSION['activities']);
@@ -226,6 +224,74 @@ switch ($cmd) {
         $smarty->assign('triggers', $_SESSION['activities'][$id]['triggers']);
         $smarty->assign('id', $id);
         $smarty->display('statsActivity.tpl');
+        break;
+
+    case 'login':
+
+        $smarty->display('login.tpl');
+        break;
+
+    case 'loginUser':
+
+        // if user found set database
+        $users = readUsers();
+        $id = searchUsername($users, $_REQUEST['username']);
+
+        if ($id == -1){
+            $smarty->assign('error', 'Account not found');
+            $smarty->display('login.tpl');    
+        }else{
+            // account found so check password
+            if (password_verify($_REQUEST['password'], $users[$id]['password'])) {
+                $_SESSION['database'] = $users[$id]['username'].'.db';
+                $_SESSION['activities'] = readActivities($_SESSION['database']);
+                Header('Location: /');   
+            } else {
+                $smarty->assign('error', 'Incorrect username or password');
+                $smarty->display('login.tpl');    
+            }
+        }
+        break;
+
+    case 'register':
+
+        $smarty->display('register.tpl');
+        break;
+
+    case 'registerUser':
+
+        $users = readUsers();
+
+        // does the username or password already exist
+        $uid = searchUsername($users, $_REQUEST['username']);
+        $eid = searchEmail($users, $_REQUEST['email']);
+
+        if ($uid !== -1 || $eid !== -1){
+            $smarty->assign('error', 'Username or email address already exists');
+            $smarty->display('login.tpl');    
+        }
+
+        if (!isset($users) || !is_array($users)) {
+            $users = array();
+            $users[0]['email'] = $_REQUEST['email'];
+            $users[0]['username'] = $_REQUEST['username'];
+            $users[0]['password'] = $pwd;
+            file_put_contents('./databases/'.$_REQUEST['username'].'.db','');
+        }else{
+            $i = count($users);
+            $users[$i]['email'] = $_REQUEST['email'];
+            $users[$i]['username'] = $_REQUEST['username'];
+            $users[$i]['password'] = $pwd;
+            file_put_contents('./databases/'.$_REQUEST['username'].'.db','');
+        }
+        writeUsers($users);
+        $smarty->assign('error', 'User created. Please login');
+        $smarty->display('login.tpl');
+        break;
+
+    case 'logout':
+        session_destroy();
+        $smarty->display('login.tpl');
         break;
 
     case '':

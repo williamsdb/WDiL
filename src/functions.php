@@ -19,6 +19,45 @@
         }
     }
 
+    function readUsers() {
+        // Read the users database
+        try {
+            $users = file_get_contents('./users.db');
+        } catch (\Throwable $th) {
+            die('Database file not found. Have you created it?');
+        }
+        return unserialize($users);
+    }
+
+    function writeUsers($users) {
+        // write the users to the database file
+        try {
+            file_put_contents('./users.db',serialize($users));
+        } catch (\Throwable $th) {
+            die('Database file not found. Have you created it?');
+        }
+    }
+
+    function searchUsername($users, $username) {
+        foreach ($users as $key => $user) {
+            if ($user['username'] === $username) {
+                return $key;  // Return the id (index) of the matching entry
+            }
+        }
+        // Username is not found
+        return -1;
+    }
+
+    function searchEmail($users, $email) {
+        foreach ($users as $key => $user) {
+            if ($user['email'] === $email) {
+                return $key;  // Return the id (index) of the matching entry
+            }
+        }
+        // Username is not found
+        return -1;
+    }
+
     // log calls
     function debug($string){
 
