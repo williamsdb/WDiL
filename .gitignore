@@ -8,6 +8,6 @@ logs.db
 /src/templates_c/*
 /src/vendor
 /src/test.php
-/databases/*
+/src/databases/*
 SEODash-1.0.0
 SEODash-1.0.0.zip
