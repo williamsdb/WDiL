@@ -42,9 +42,12 @@ $smarty->setCacheDir('cache');
 $smarty->setConfigDir('configs');
 $smarty->registerPlugin("modifier", "date_format_tz", "smarty_modifier_date_format_tz");
 
+// set database
+$database = 'williamsdb.db';
+
 // get the existing activities
 if (empty($_SESSION['activities'])) {
-    $_SESSION['activities'] = readactivities();
+    $_SESSION['activities'] = readactivities($database);
 }
 
 // any error or information messages
@@ -134,7 +137,7 @@ switch ($cmd) {
         }
 
         // store the activities in the activities database file
-        writeActivities($_SESSION['activities']);
+        writeActivities($_SESSION['activities'], $database);
         $i = count($_SESSION['activities'])-1;
 
         // Redirect to the relevant page
@@ -155,7 +158,7 @@ switch ($cmd) {
         $_SESSION['activities'][$id]['activityName'] = $_REQUEST['activityName'];
 
         // store the activities in the activities database file
-        writeActivities($_SESSION['activities']);
+        writeActivities($_SESSION['activities'], $database);
 
         // Redirect to the relevant page
         $_SESSION['error'] = 'Activity updated';
@@ -169,7 +172,7 @@ switch ($cmd) {
         $_SESSION['activities'][$id]['triggers'][$i]['timestamp'] = time();
 
         // store the activities in the activities database file
-        writeActivities($_SESSION['activities']);
+        writeActivities($_SESSION['activities'], $database);
 
         // Redirect to the relevant page
         $_SESSION['error'] = 'Activity triggered';
@@ -184,7 +187,7 @@ switch ($cmd) {
         $_SESSION['activities'] = array_values($_SESSION['activities']);
 
         // store the activities in the activities database file
-        writeActivities($_SESSION['activities']);
+        writeActivities($_SESSION['activities'], $database);
 
         $smarty->assign('error', 'Activity deleted');
         $smarty->assign('activities', $_SESSION['activities']);

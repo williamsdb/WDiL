@@ -1,21 +1,21 @@
 <?php
 
-    function readActivities() {
+    function readActivities($database) {
         // Read the activities database
         try {
-            $activities = file_get_contents('./activities.db');
+            $activities = file_get_contents('./databases/'.$database);
         } catch (\Throwable $th) {
-            die('activities.db file not found. Have you created it?');
+            die('Database file not found. Have you created it?');
         }
         return unserialize($activities);
     }
 
-    function writeActivities($activities) {
+    function writeActivities($activities, $database) {
         // write the activities to the database file
         try {
-            file_put_contents('./activities.db',serialize($activities));
+            file_put_contents('./databases/'.$database,serialize($activities));
         } catch (\Throwable $th) {
-            die('activities.db file not found. Have you created it?');
+            die('Database file not found. Have you created it?');
         }
     }
 
@@ -24,7 +24,7 @@
 
         if (!DEBUG) return;
 
-        // write the rules to the database file
+        // write a line to the log file
         try {
             file_put_contents('./logs.db', date("Y-m-d H:i:s").','.'"'.$string.'"'.PHP_EOL, FILE_APPEND);
         } catch (\Throwable $th) {
