@@ -8,7 +8,7 @@
  * @author     Neil Thompson <neil@spokenlikeageek.com>
  * @copyright  2024 Neil Thompson
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html  GNU General Public License v3.0
- * @link       https://github.com/williamsdb/EvernoteRules
+ * @link       https://github.com/williamsdb/WDiL
  * @see        https://www.spokenlikeageek.com/2023/08/02/exporting-all-wordpress-posts-to-pdf/ Blog post
  * 
  * ARGUMENTS
@@ -194,23 +194,33 @@ switch ($cmd) {
 
     case 'statsActivity':
         
-        // Calculate intervals between consecutive timestamps
-        $intervals = [];
-        for ($i = 1; $i < count($_SESSION['activities'][$id]['triggers']); $i++) {
-            $intervals[] = $_SESSION['activities'][$id]['triggers'][$i]['timestamp'] - $_SESSION['activities'][$id]['triggers'][$i - 1]['timestamp'];
-        }
-        
-        // Calculate the average interval
-        $averageInterval = array_sum($intervals) / count($intervals);
+        // Do we have enough data for some stats?
+        if (count($_SESSION['activities'][$id]['triggers'])>1){
+            // Calculate intervals between consecutive timestamps
+            $intervals = [];
+            for ($i = 1; $i < count($_SESSION['activities'][$id]['triggers']); $i++) {
+                $intervals[] = $_SESSION['activities'][$id]['triggers'][$i]['timestamp'] - $_SESSION['activities'][$id]['triggers'][$i - 1]['timestamp'];
+            }
+            
+            // Calculate the average interval
+            $averageInterval = array_sum($intervals) / count($intervals);
 
-        // Find the largest interval
-        $largestInterval = max($intervals);
+            // Find the largest interval
+            $largestInterval = max($intervals);
+
+            $smarty->assign('avg', formatTime($averageInterval));
+            $smarty->assign('lrg', formatTime($largestInterval));
+        }else{
+            $smarty->assign('avg', 'Not enough data');
+            $smarty->assign('lrg', 'Not enough data');    
+        }
+
+        // What's the elapsed time?
+        $smarty->assign('elp', formatTime(time() - $_SESSION['activities'][$id]['triggers'][count($_SESSION['activities'][$id]['triggers']) - 1]['timestamp']));
 
         $smarty->assign('activityName', $_SESSION['activities'][$id]['activityName']);
         $smarty->assign('activities', $_SESSION['activities'][$id]);
         $smarty->assign('triggers', $_SESSION['activities'][$id]['triggers']);
-        $smarty->assign('avg', formatTime($averageInterval));
-        $smarty->assign('lrg', formatTime($largestInterval));
         $smarty->assign('id', $id);
         $smarty->display('statsActivity.tpl');
         break;

@@ -4,10 +4,11 @@
 
 <table style="width: 100%">
     <tbody>
-        <tr><td><strong>Last Triggered</strong></td><td>{$triggers[$triggers|count - 1].timestamp|date_format_tz:"Y-m-d H:i:s":$smarty.const.TZ}</td></tr>
-        <tr><td><strong>Times Triggered</strong></td><td>{$triggers|count}</td></tr>
-        <tr><td><strong>Avg Trigger Interval</strong></td><td>{$avg}</td></tr>
-        <tr><td><strong>Longest Interval</strong></td><td>{$lrg}</td></tr>
+        <tr><td><strong>Last triggered</strong></td><td>{$triggers[$triggers|count - 1].timestamp|date_format_tz:"Y-m-d H:i:s":$smarty.const.TZ}</td></tr>
+        <tr><td><strong>Elapsed since last triggered</strong></td><td>{$elp}</td></tr>
+        <tr><td><strong>Times triggered</strong></td><td>{$triggers|count}</td></tr>
+        <tr><td><strong>Avg trigger interval</strong></td><td>{$avg}</td></tr>
+        <tr><td><strong>Longest interval</strong></td><td>{$lrg}</td></tr>
     </tbody>
     </table>
 </table>
