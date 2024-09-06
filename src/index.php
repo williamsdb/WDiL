@@ -235,7 +235,11 @@ switch ($cmd) {
 
         // if user found set database
         $users = readUsers();
-        $id = searchUsername($users, $_REQUEST['username']);
+        if (strpos($_REQUEST['username'],'@')){
+            $id = searchEmail($users, $_REQUEST['username']);
+        }else{
+            $id = searchUsername($users, $_REQUEST['username']);
+        }
 
         if ($id == -1){
             $smarty->assign('error', 'Account not found');
