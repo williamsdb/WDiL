@@ -271,6 +271,9 @@ switch ($cmd) {
             $smarty->display('login.tpl');    
         }
 
+        // get the password hash
+        $pwd = password_hash($_REQUEST['password'], PASSWORD_DEFAULT);
+
         if (!isset($users) || !is_array($users)) {
             $users = array();
             $users[0]['email'] = $_REQUEST['email'];
