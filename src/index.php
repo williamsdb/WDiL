@@ -202,7 +202,7 @@ switch ($cmd) {
             for ($i = 1; $i < count($_SESSION['activities'][$id]['triggers']); $i++) {
                 $intervals[] = $_SESSION['activities'][$id]['triggers'][$i]['timestamp'] - $_SESSION['activities'][$id]['triggers'][$i - 1]['timestamp'];
             }
-            
+
             // Calculate the average interval
             $averageInterval = array_sum($intervals) / count($intervals);
 
@@ -248,8 +248,10 @@ switch ($cmd) {
             // account found so check password
             if (password_verify($_REQUEST['password'], $users[$id]['password'])) {
                 $_SESSION['database'] = $users[$id]['username'].'.db';
+                $_SESSION['username'] = $users[$id]['username'];
                 $_SESSION['activities'] = readActivities($_SESSION['database']);
                 Header('Location: /');   
+                die;
             } else {
                 $smarty->assign('error', 'Incorrect username or password');
                 $smarty->display('login.tpl');    
@@ -264,6 +266,13 @@ switch ($cmd) {
 
     case 'registerUser':
 
+        // does the registration code match?
+        if ($_REQUEST['regcode'] != REGCODE){
+            $smarty->assign('error', 'Your registration code is not correct');
+            $smarty->display('login.tpl');
+            break;
+        }
+
         $users = readUsers();
 
         // does the username or password already exist
@@ -272,7 +281,8 @@ switch ($cmd) {
 
         if ($uid !== -1 || $eid !== -1){
             $smarty->assign('error', 'Username or email address already exists');
-            $smarty->display('login.tpl');    
+            $smarty->display('login.tpl');
+            break;
         }
 
         // get the password hash
@@ -300,6 +310,18 @@ switch ($cmd) {
         unset($_SESSION['database']);
         session_destroy();
         $smarty->display('login.tpl');
+        break;
+
+    case 'admin':
+
+        // should we be here?
+        if (ADMIN != $_SESSION['username']){
+            Header('Location: /');   
+            die;
+        }
+
+        $smarty->assign('users', readUsers());
+        $smarty->display('admin.tpl');
         break;
 
     case '':

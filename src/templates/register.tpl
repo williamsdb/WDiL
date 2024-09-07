@@ -12,6 +12,9 @@
   <label class="col-lg-2 control-label">Password</label>
   <input type="password" name="password" placeholder="password" required maxlength="100" size="50">
 
+  <label class="col-lg-2 control-label">Registration Code</label>
+  <input type="text" name="regcode" title="enter the code given to you"  placeholder="regcode" required maxlength="100" size="50">
+
   <p><input type="submit" value="Register"></p>
 
 </form>

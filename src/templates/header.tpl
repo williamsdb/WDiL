@@ -18,8 +18,8 @@
 	<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
 
 	<!-- Favicon -->
-	<link rel="shortcut icon" type="image/png" href="{$smarty.const.SITE_URL}/img/favicon.png">
-	<link rel="apple-touch-icon" href="{$smarty.const.SITE_URL}/img/favicon.png">
+	<link rel="shortcut icon" type="image/png" href="/img/favicon.png">
+	<link rel="apple-touch-icon" href="/img/favicon.png">
 
 </head>
 
@@ -30,6 +30,9 @@
 		{if $smarty.session.database|isset}
 		<nav>
 			<a href="/">Home</a>
+			{if $smarty.const.ADMIN == $smarty.session.username}
+			<a href="/admin">Admin</a>
+			{/if}
 			<a href="/logout">Logout</a>
 		</nav>
 		{/if}
