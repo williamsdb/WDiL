@@ -209,15 +209,15 @@ switch ($cmd) {
             // Find the largest interval
             $largestInterval = max($intervals);
 
-            $smarty->assign('avg', formatTime($averageInterval));
-            $smarty->assign('lrg', formatTime($largestInterval));
+            $smarty->assign('avg', formatTime($averageInterval, 0));
+            $smarty->assign('lrg', formatTime($largestInterval, 0));
         }else{
             $smarty->assign('avg', 'Not enough data');
             $smarty->assign('lrg', 'Not enough data');    
         }
 
         // What's the elapsed time?
-        $smarty->assign('elp', formatTime(time() - $_SESSION['activities'][$id]['triggers'][count($_SESSION['activities'][$id]['triggers']) - 1]['timestamp']));
+        $smarty->assign('elp', formatTime(time() - $_SESSION['activities'][$id]['triggers'][count($_SESSION['activities'][$id]['triggers']) - 1]['timestamp'], 0));
 
         $smarty->assign('activityName', $_SESSION['activities'][$id]['activityName']);
         $smarty->assign('activities', $_SESSION['activities'][$id]);
@@ -314,48 +314,5 @@ switch ($cmd) {
         $smarty->display('home.tpl');
         break;
 }
-
-function smarty_modifier_date_format_tz($input, $format = "Y-m-d H:i:s", $timezone = 'UTC') {
-    try {
-        if ($input instanceof DateTime) {
-            // If $input is already a DateTime object, use it directly
-            $dateTime = $input;
-        } else {
-            // Assume $input is a Unix timestamp
-            $dateTime = new DateTime();
-            $dateTime->setTimestamp((int)$input); // Cast to int to avoid errors
-        }
-
-        // Set the timezone
-        $dateTime->setTimezone(new DateTimeZone($timezone));
-
-        // Return the formatted date
-        return $dateTime->format($format);
-    } catch (Exception $e) {
-        // Handle any exceptions, e.g., invalid timezone or timestamp
-        return '';
-    }
-}
-
-function formatTime($seconds) {
-    $minutes = $seconds / 60;
-    $hours = $minutes / 60;
-    $days = $hours / 24;
-    $months = $days / 30.44; // approximate months
-    $years = $days / 365.25; // approximate years
-
-    if ($years >= 1) {
-        return round($years, 2) . ' years';
-    } elseif ($months >= 1) {
-        return round($months, 2) . ' months';
-    } elseif ($days >= 1) {
-        return round($days, 2) . ' days';
-    } elseif ($hours >= 1) {
-        return round($hours, 2) . ' hours';
-    } else {
-        return round($minutes, 2) . ' minutes';
-    }
-}
-
 
 ?>

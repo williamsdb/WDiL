@@ -71,7 +71,62 @@
         }
 
     }
+    function smarty_modifier_date_format_tz($input, $format = "Y-m-d H:i:s", $timezone = 'UTC') {
+        try {
+            if ($input instanceof DateTime) {
+                // If $input is already a DateTime object, use it directly
+                $dateTime = $input;
+            } else {
+                // Assume $input is a Unix timestamp
+                $dateTime = new DateTime();
+                $dateTime->setTimestamp((int)$input); // Cast to int to avoid errors
+            }
+    
+            // Set the timezone
+            $dateTime->setTimezone(new DateTimeZone($timezone));
+    
+            // Return the formatted date
+            return $dateTime->format($format);
+        } catch (Exception $e) {
+            // Handle any exceptions, e.g., invalid timezone or timestamp
+            return '';
+        }
+    }
+    
+    function formatTime($seconds, $round=2) {
+        $minutes = $seconds / 60;
+        $hours = $minutes / 60;
+        $days = $hours / 24;
+        $months = $days / 30.44; // approximate months
+        $years = $days / 365.25; // approximate years
 
+        if ($years == 1) {
+            return round($years, $round) . ' year';
+        } elseif ($years > 1) {
+            return round($years, $round) . ' years';
+        } elseif ($months == 1) {
+            return round($months, $round) . ' month';
+        } elseif ($months > 1) {
+            return round($months, $round) . ' months';
+        } elseif ($days == 1) {
+            return round($days, $round) . ' day';
+        } elseif ($days > 1) {
+            return round($days, $round) . ' days';
+        } elseif ($hours == 1) {
+            return round($hours, $round) . ' hour';
+        } elseif ($hours > 1) {
+            return round($hours, $round) . ' hours';
+        } elseif ($minutes == 1) {
+            return round($minutes, $round) . ' minute';
+        } elseif ($minutes > 1) {
+            return round($minutes, $round) . ' minutes';
+        } elseif ($seconds == 1) {
+            return round($seconds, $round) . ' second';
+        } else {
+            return round($seconds, $round) . ' seconds';
+        }
+    }
+    
     function array_to_html($val, $var=FALSE) {
         $do_nothing = true;
         $indent_size = 20;
