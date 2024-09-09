@@ -16,6 +16,8 @@
 
 	<!-- Stylesheet -->
 	<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+	<link rel="stylesheet" href="//cdn.datatables.net/2.1.5/css/dataTables.dataTables.min.css">
+	<link rel="stylesheet" href="/css/custom.css">
 
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/png" href="/img/favicon.png">

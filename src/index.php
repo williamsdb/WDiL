@@ -249,7 +249,6 @@ switch ($cmd) {
             if (password_verify($_REQUEST['password'], $users[$id]['password'])) {
                 $_SESSION['database'] = $users[$id]['username'].'.db';
                 $_SESSION['username'] = $users[$id]['username'];
-                $_SESSION['activities'] = readActivities($_SESSION['database']);
                 Header('Location: /');   
                 die;
             } else {
@@ -325,6 +324,8 @@ switch ($cmd) {
         break;
 
     case '':
+
+        $_SESSION['activities'] = readActivities($_SESSION['database']);
         $smarty->assign('activities', $_SESSION['activities']);
         $smarty->display('home.tpl');
         break;

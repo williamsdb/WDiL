@@ -2,7 +2,7 @@
 
 {if $activities != ''}
 <figure>
-<table style="width: 100%">
+<table style="width: 100%" id="activities">
 <thead>
 	<tr>
 	<th>Activity</th>
@@ -43,6 +43,5 @@
 	<p>You haven't any activities setup.</p>
 {/if}
 <a class="button" href="/addActivity">Add a new activity</a>
-
 
 {include file="footer.tpl"}

@@ -3,3 +3,11 @@ function confirmRedirect(url) {
     window.location.href = url;
   }
 }
+
+let table = new DataTable('#activities');
+
+$("#trigger" ).dialog();
+
+$('#but').click(function(){
+    $("#trigger" ).dialog();
+});
