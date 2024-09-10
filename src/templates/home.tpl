@@ -5,7 +5,7 @@
 	<div class="container">
 	<div class="row">
 	  {section name=all loop=$activities}
-	  <div class="col-12 col-md-6 col-lg-4 mb-4">
+	  <div class="col-12 col-md-6 col-lg-4 mb-4 d-flex align-items-stretch">
 		<div class="card" style="width: 100%;">
 		  <div class="card-body">
 			<h5 class="card-title">{$activities[all].activityName}</h5>
@@ -15,6 +15,8 @@
 			{else}
 			  <h6 class="card-subtitle mb-2 text-body-secondary">Not yet Triggered</h6>
 			{/if}
+		  </div>
+		  <div class="card-footer">
 			<button type="button" class="btn btn-primary" data-wdil="{$smarty.section.all.index}" data-bs-toggle="modal" data-bs-target="#triggerModal" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Trigger</button>
 			<br>
 			{if $activities[all].triggers|count > 0}
