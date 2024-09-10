@@ -1,6 +1,6 @@
 {include file="header.tpl"}
 
-<h3>Rules Database</h3>
+<h3>Activities Database</h3>
 
 {$list}
 

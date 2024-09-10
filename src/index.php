@@ -9,7 +9,7 @@
  * @copyright  2024 Neil Thompson
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html  GNU General Public License v3.0
  * @link       https://github.com/williamsdb/WDiL
- * @see        https://www.spokenlikeageek.com/2023/08/02/exporting-all-wordpress-posts-to-pdf/ Blog post
+ * @see        https://www.spokenlikeageek.com/tag/when-did-i-last/ Blog post
  * 
  * ARGUMENTS
  *
@@ -18,6 +18,8 @@
 // turn off reporting of notices
 error_reporting(0);
 ini_set('display_errors', 0);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // session start
 session_start();
@@ -51,7 +53,7 @@ $trimmed_path = trim($current_path, '/');
 // Split the path into segments
 $path_segments = explode('/', $trimmed_path);
 
-// Get the first segment, which is the command, followed by the rule id and then the action id
+// Get the first segment, which is the command, followed by the activity id and then the action id
 $cmd = $path_segments[0];
 if (isset($path_segments[1])){
     $id = $path_segments[1];
@@ -146,6 +148,10 @@ switch ($cmd) {
 
     case 'editActivity':
 
+        if ($id > count($_SESSION['activities'])-1){
+            Header('Location: /');
+            die;
+        }
         $smarty->assign('activityName', $_SESSION['activities'][$id]['activityName']);
         $smarty->assign('id', $id);
         $smarty->display('editActivity.tpl');
@@ -166,21 +172,42 @@ switch ($cmd) {
 
     case 'triggerActivity':
 
-        $i = count($_SESSION['activities'][$id]['triggers']);
-        $_SESSION['activities'][$id]['triggers'][$i]['timestamp'] = time();
+        if (!isset($_REQUEST) || empty($_REQUEST)){
+            Header('Location: /');
+            die;
+        }
+
+        if ($_REQUEST['activityId'] > count($_SESSION['activities'])-1){
+            Header('Location: /');
+            die;
+        }
+
+        // convert time to GMT/UTC and add to array
+        $i = count($_SESSION['activities'][$_REQUEST['activityId']]['triggers']);
+        $timezoneOffset = timezone_offset_get(new DateTimeZone(TZ), new DateTime());
+        $_SESSION['activities'][$_REQUEST['activityId']]['triggers'][$i]['timestamp'] = strtotime($_REQUEST['dateTime'])-$timezoneOffset;
+
+        // sort the array into time order
+        usort($_SESSION['activities'][$_REQUEST['activityId']]['triggers'], function ($a, $b) {
+            return $a['timestamp'] <=> $b['timestamp']; // Spaceship operator for comparison
+        });
 
         // store the activities in the activities database file
         writeActivities($_SESSION['activities'], $_SESSION['database']);
 
         // Redirect to the relevant page
         $_SESSION['error'] = 'Activity triggered';
-		Header('Location: /');
+        if ($_REQUEST['redirectTo']=='stats'){
+            Header('Location: /statsActivity/'.$_REQUEST['activityId']);
+        }else{
+            Header('Location: /');
+        }
 
         break;
 
     case 'deleteActivity':
 
-        // delete the rule
+        // delete the activity
         unset($_SESSION['activities'][$id]);
         $_SESSION['activities'] = array_values($_SESSION['activities']);
 
@@ -190,6 +217,21 @@ switch ($cmd) {
         $smarty->assign('error', 'Activity deleted');
         $smarty->assign('activities', $_SESSION['activities']);
         $smarty->display('home.tpl');
+
+        break;
+
+    case 'deleteTrigger':
+
+        // delete the trigger
+        unset($_SESSION['activities'][$id]['triggers'][$act]);
+        // reindex the array
+        $_SESSION['activities'][$id]['triggers'] = array_values($_SESSION['activities'][$id]['triggers']);
+
+        // store the activities in the activities database file
+        writeActivities($_SESSION['activities'], $_SESSION['database']);
+
+        $smarty->assign('error', 'Trigger deleted');
+        Header('Location: /statsActivity/'.$id);
 
         break;
 
@@ -217,10 +259,14 @@ switch ($cmd) {
         }
 
         // What's the elapsed time?
-        $smarty->assign('elp', formatTime(time() - $_SESSION['activities'][$id]['triggers'][count($_SESSION['activities'][$id]['triggers']) - 1]['timestamp'], 0));
+        $timezoneOffset = timezone_offset_get(new DateTimeZone(TZ), new DateTime());
+        $localTimestamp = $_SESSION['activities'][$id]['triggers'][count($_SESSION['activities'][$id]['triggers']) - 1]['timestamp'];
+        $smarty->assign('elp', formatTime(time() - $localTimestamp, 0));
 
         $smarty->assign('activityName', $_SESSION['activities'][$id]['activityName']);
         $smarty->assign('activities', $_SESSION['activities'][$id]);
+        $triggersReversed = array_reverse($_SESSION['activities'][$id]['triggers'], true);
+        $smarty->assign('triggersReversed', $triggersReversed);
         $smarty->assign('triggers', $_SESSION['activities'][$id]['triggers']);
         $smarty->assign('id', $id);
         $smarty->display('statsActivity.tpl');

@@ -3,7 +3,7 @@
 <h3>Log</h3>
 
 <figure>
-<table style="width: 100%">
+<table class="table table-striped">
 <thead>
     <tr>
         <th>Date</th>

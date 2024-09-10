@@ -1,22 +1,28 @@
 {include file="header.tpl"}
 
-<h3>Register</h3>
-<form role="form" action="/registerUser" method="post">
+<form action="/registerUser" method="post">
+  <h1 class="h3 mb-3 fw-normal">Register</h1>
 
-  <label class="col-lg-2 control-label">Email</label>
-  <input type="email" name="email" placeholder="email address" required autofocus maxlength="100" size="50">
+  <div class="form-floating">
+    <input type="email" name="email" required class="form-control" id="floatingInput" placeholder="email address">
+    <label for="floatingInput">Email address</label>
+  </div>
+  <div class="form-floating">
+    <input type="text" name="username" required pattern="[A-Za-z0-9]+" title="Letters and numbers only" class="form-control" id="floatingInput" placeholder="username">
+    <label for="floatingInput">Username</label>
+  </div>
+  <div class="form-floating">
+    <input type="password" name="password" required class="form-control" id="floatingPassword" placeholder="Password">
+    <label for="floatingPassword">Password</label>
+  </div>
+  <div class="form-floating">
+    <input type="text" name="regcode" required class="form-control" id="floatingInput" placeholder="registration code">
+    <label for="floatingInput">Registration Code</label>
+  </div>
 
-  <label class="col-lg-2 control-label">Username</label>
-  <input type="text" name="username" pattern="[A-Za-z0-9]+" title="Letters and numbers only"  placeholder="username" required maxlength="100" size="50">
-
-  <label class="col-lg-2 control-label">Password</label>
-  <input type="password" name="password" placeholder="password" required maxlength="100" size="50">
-
-  <label class="col-lg-2 control-label">Registration Code</label>
-  <input type="text" name="regcode" title="enter the code given to you"  placeholder="regcode" required maxlength="100" size="50">
-
-  <p><input type="submit" value="Register"></p>
-
+  <p>&nbsp;</p>
+  <button class="btn btn-primary w-100 py-2" type="submit">Register</button>
+  <p><a href="/login">Sign in</a></p>
 </form>
 
 {include file="footer.tpl"}

@@ -1,19 +1,20 @@
 {include file="header.tpl"}
 
-<h3>Login</h3>
-<form role="form" action="/loginUser" method="post">
+<form action="/loginUser" method="post">
+  <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
-  <label class="col-lg-2 control-label">Username or email</label>
-  <input type="text" name="username" placeholder="username or email address" required autofocus maxlength="100" size="50">
+  <div class="form-floating">
+    <input type="text" name="username" required class="form-control" id="floatingInput" placeholder="username or email address">
+    <label for="floatingInput">Username or Email address</label>
+  </div>
+  <div class="form-floating">
+    <input type="password" name="password" required class="form-control" id="floatingPassword" placeholder="Password">
+    <label for="floatingPassword">Password</label>
+  </div>
 
-  <label class="col-lg-2 control-label">Password</label>
-  <input type="password" name="password" placeholder="password" required maxlength="100" size="50">
-
+  <p>&nbsp;</p>
+  <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
   <p><a href="/register">Need an account? Register here.</a></p>
-
-  <p><input type="submit" value="Login"></p>
-
 </form>
-
 
 {include file="footer.tpl"}

@@ -74,7 +74,7 @@ Running the script is very straightforward:
     > composer.phar require smarty/smarty
 
 
-You can read more about how it all works in [this blog post](https://www.spokenlikeageek.com/2024/07/12/computer-education-in-schools-instruction-language-cesil/).
+You can read more about how it all works in [these blog posts](https://www.spokenlikeageek.com/tag/when-did-i-last/).
 
 ### Prerequisites
 
@@ -85,10 +85,26 @@ Requirements are very simple, it requires the following:
 
 ### Installation
 
+You must install the dependencies, create some required files and set the appropriate permissions. This is what I did but you may need to adjust depending on your flavour of OS:
+
 1. Clone the repo:
    ```sh
    git clone https://github.com/williamsdb/WDiL
    ```
+2. ```php composer.phar require smarty/smarty```
+3. ```sudo mkdir templates_c```
+4. ```sudo chown apache:apache templates_c -R```
+5. ```sudo chcon -R -t httpd_sys_rw_content_t templates_c```
+6. ```sudo mv config_dummy.php config.php```
+7. ```sudo mkdir databases```
+8. ```sudo chown -R apache:apache databases```
+9. ```sudo chcon -R -t httpd_sys_rw_content_t databases```
+10. ```sudo touch logs.db```
+11. ```sudo touch users.db```
+12. ```sudo chown apache:apache *.db```
+13. ```sudo chcon -R -t httpd_sys_rw_content_t *.db```
+14. ```sudo chown apache:apache config.php```
+15. ```sudo chcon -R -t httpd_sys_rw_content_t config.php```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -97,7 +113,7 @@ Requirements are very simple, it requires the following:
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-_For more information, please refer to the [this blog post](https://www.spokenlikeageek.com/2024/07/12/computer-education-in-schools-instruction-language-cesil/)_
+_For more information, please refer to the [these blog posts](https://www.spokenlikeageek.com/tag/when-did-i-last/)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -108,7 +124,7 @@ _For more information, please refer to the [this blog post](https://www.spokenli
 
 - None
 
-See the [open issues](https://github.com/williamsdb/EvernoteRules/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/williamsdb/WDiL/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -146,7 +162,7 @@ Distributed under the GNU General Public License v3.0. See `LICENSE` for more in
 
 Your Name - [@spokenlikeageek](https://twitter.com/spokenlikeageek) - [Contact](https://www.spokenlikeageek.com/contact/)
 
-Project Link: [https://spokenlikeageek.com] (https://www.spokenlikeageek.com/2023/11/06/posting-to-bluesky-via-the-api-from-php-part-one/)
+Project Link: [https://spokenlikeageek.com] (https://www.spokenlikeageek.com/tag/when-did-i-last/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

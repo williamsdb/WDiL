@@ -2,7 +2,7 @@
 
 <h3>Statistics for "{$activityName}"</h3>
 
-<table style="width: 100%">
+<table class="table table-striped">
     <tbody>
         <tr><td><strong>Last triggered</strong></td><td>{$triggers[$triggers|count - 1].timestamp|date_format_tz:"Y-m-d H:i:s":$smarty.const.TZ}</td></tr>
         <tr><td><strong>Elapsed since last triggered</strong></td><td>{$elp}</td></tr>
@@ -13,22 +13,50 @@
     </table>
 </table>
 
+<button type="button" class="btn btn-primary" data-wdil="{$id}" data-bs-toggle="modal" data-bs-target="#triggerModal">Trigger</button>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="triggerModal" tabindex="-1" aria-labelledby="triggerModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="triggerModalLabel">Trigger activity</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+		<form role="form" action="/triggerActivity" method="post" id="triggerForm">
+			<div class="mb-3">
+				<label for="datetimePicker" class="form-label">Select Date and Time</label>
+				<input type="datetime-local" class="form-control" name="dateTime" step="1" id="datetimePicker" required>
+				<div id="error-message" style="color: red; display: none;">The date must be in the past.</div>
+				<input type="hidden" class="form-control" name="activityId" id="activityId" value="{$id}">
+				<input type="hidden" class="form-control" name="redirectTo" id="redirectTo" value="stats">
+			</div>
+		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="triggerButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <hr>
 <h4>Last 10 trigger dates</h4>
 
-<table style="width: 100%">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Date & time</th>
         </tr>
     </thead>
     <tbody>
-        {foreach from=$triggers key=i item=trigger name=foo}
+        {foreach from=$triggersReversed key=i item=trigger name=foo}
             {if $smarty.foreach.foo.index == 10}
             {break}
             {/if}
-			<tr><td>{$trigger.timestamp|date_format_tz:"Y-m-d H:i:s":$smarty.const.TZ}</td></tr>
+			<tr><td>{$trigger.timestamp|date_format_tz:"Y-m-d H:i:s":$smarty.const.TZ}</td><td align="right"><a href="#" onclick="confirmRedirect('/deleteTrigger/{$id}/{$i}'); return false;"><i class="bi-trash"></i></a></td></tr>
         {/foreach}
     </tbody>
     <tfoot>

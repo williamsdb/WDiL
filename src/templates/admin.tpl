@@ -1,7 +1,6 @@
 {include file="header.tpl"}
 
-<figure>
-<table style="width: 100%">
+<table class="table table-striped">
 <thead>
 	<tr>
 	<th>Username</th>
@@ -27,6 +26,5 @@
 	</tr>
 </tfoot>
 </table>
-</figure>
 
 {include file="footer.tpl"}
