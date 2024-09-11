@@ -3,30 +3,38 @@
 {if $activities != ''}
 
 	<div class="container">
+	<p><input type="checkbox" name="archived" id="showArchived" {if $archived ==1}checked{/if}> Show archived activites?<p>
 	<div class="row">
 	  {section name=all loop=$activities}
-	  <div class="col-12 col-md-6 col-lg-4 mb-4 d-flex align-items-stretch">
-		<div class="card" style="width: 100%;">
-		  <div class="card-body">
-			<h5 class="card-title">{$activities[all].activityName}</h5>
-			{if $activities[all].triggers|count > 0}
-			  {assign var="latestTimestamp" value=$activities[all].triggers[$activities[all].triggers|count - 1].timestamp}
-			  <h6 class="card-subtitle mb-2 text-body-secondary">{$latestTimestamp|date_format_tz:"Y-m-d H:i:s":$smarty.const.TZ}</h6>
-			{else}
-			  <h6 class="card-subtitle mb-2 text-body-secondary">Not yet Triggered</h6>
-			{/if}
-		  </div>
-		  <div class="card-footer">
-			<button type="button" class="btn btn-primary" data-wdil="{$smarty.section.all.index}" data-bs-toggle="modal" data-bs-target="#triggerModal" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Trigger</button>
-			<br>
-			{if $activities[all].triggers|count > 0}
-			  <a href="/statsActivity/{$smarty.section.all.index}">Stats</a>
-			{/if}
-			<a href="/editActivity/{$smarty.section.all.index}">Edit</a>
-			<a href="#" onclick="confirmRedirect('/deleteActivity/{$smarty.section.all.index}'); return false;">Delete</a>
-		  </div>
+		{if ($archived == 1) || ((!$activities[all].archived|isset || $activities[all].archived ==0) && ($archived == 0))}
+		<div class="col-12 col-md-6 col-lg-4 mb-4 d-flex align-items-stretch">
+			<div class="card" style="width: 100%;">
+			<div class="card-body">
+				<h5 class="card-title">{$activities[all].activityName}</h5>
+				{if $activities[all].triggers|count > 0}
+				{assign var="latestTimestamp" value=$activities[all].triggers[$activities[all].triggers|count - 1].timestamp}
+				<h6 class="card-subtitle mb-2 text-body-secondary">{$latestTimestamp|date_format_tz:"Y-m-d H:i:s":$smarty.const.TZ}</h6>
+				{else}
+				<h6 class="card-subtitle mb-2 text-body-secondary">Not yet Triggered</h6>
+				{/if}
+			</div>
+			<div class="card-footer">
+				<button type="button" class="btn btn-primary" data-wdil="{$smarty.section.all.index}" data-bs-toggle="modal" data-bs-target="#triggerModal" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Trigger</button>
+				<br>
+				{if $activities[all].triggers|count > 0}
+				<a href="/statsActivity/{$smarty.section.all.index}">Stats</a>
+				{/if}
+				<a href="/editActivity/{$smarty.section.all.index}">Edit</a>
+				{if $activities[all].archived|isset && $activities[all].archived == 1}
+					<a href="/archiveActivity/{$smarty.section.all.index}">Restore</a>
+				{else}
+					<a href="/archiveActivity/{$smarty.section.all.index}">Archive</a>
+				{/if}
+				<a href="#" onclick="confirmRedirect('/deleteActivity/{$smarty.section.all.index}'); return false;">Delete</a>
+			</div>
+			</div>
 		</div>
-	  </div>
+		{/if}
 	  {/section}
 	</div>
   </div>

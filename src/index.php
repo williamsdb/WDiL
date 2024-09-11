@@ -205,6 +205,26 @@ switch ($cmd) {
 
         break;
 
+    case 'archiveActivity':
+
+        if (!isset($_SESSION['activities'][$id]['archived']) || $_SESSION['activities'][$id]['archived']==0){
+            $_SESSION['activities'][$id]['archived'] = 1;
+        }else{
+            $_SESSION['activities'][$id]['archived'] = 0;
+        }
+
+        // store the activities in the activities database file
+        writeActivities($_SESSION['activities'], $_SESSION['database']);
+
+        if ($_SESSION['activities'][$id]['archived'] == 1){
+            $_SESSION['error'] = 'Activity archived';
+        }else{
+            $_SESSION['error'] = 'Activity restored';
+        }
+        Header('Location: /');
+
+        break;
+
     case 'deleteActivity':
 
         // delete the activity
@@ -295,6 +315,11 @@ switch ($cmd) {
             if (password_verify($_REQUEST['password'], $users[$id]['password'])) {
                 $_SESSION['database'] = $users[$id]['username'].'.db';
                 $_SESSION['username'] = $users[$id]['username'];
+                if (isset($users[$id]['show'])){
+                    $_SESSION['show'] = $users[$id]['show'];
+                }else{
+                    $_SESSION['show'] = 1;
+                }
                 Header('Location: /');   
                 die;
             } else {
@@ -338,12 +363,14 @@ switch ($cmd) {
             $users[0]['email'] = $_REQUEST['email'];
             $users[0]['username'] = $_REQUEST['username'];
             $users[0]['password'] = $pwd;
+            $users[0]['show'] = 1;
             file_put_contents('./databases/'.$_REQUEST['username'].'.db','');
         }else{
             $i = count($users);
             $users[$i]['email'] = $_REQUEST['email'];
             $users[$i]['username'] = $_REQUEST['username'];
             $users[$i]['password'] = $pwd;
+            $users[$i]['show'] = 1;
             file_put_contents('./databases/'.$_REQUEST['username'].'.db','');
         }
         writeUsers($users);
@@ -373,6 +400,14 @@ switch ($cmd) {
 
         $_SESSION['activities'] = readActivities($_SESSION['database']);
         $smarty->assign('activities', $_SESSION['activities']);
+        if (isset($_REQUEST['state'])){
+            $users = readUsers();
+            $id = searchUsername($users, $_SESSION['username']);
+            $users[$id]['show'] = $_REQUEST['state'];
+            writeUsers($users);
+            $_SESSION['show'] = $_REQUEST['state'];
+        }
+        $smarty->assign('archived', $_SESSION['show']);
         $smarty->display('home.tpl');
         break;
 

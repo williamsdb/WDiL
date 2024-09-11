@@ -1,9 +1,11 @@
+// the confirmation pop-up on things like delete
 function confirmRedirect(url) {
   if (confirm("Are you sure you want to proceed?")) {
     window.location.href = url;
   }
 }
 
+// display the trigger modal dialog
 var triggerModal = document.getElementById('triggerModal');
 triggerModal.addEventListener('shown.bs.modal', function () {
   // Get current local date and time
@@ -24,6 +26,7 @@ triggerModal.addEventListener('shown.bs.modal', function () {
   document.getElementById('datetimePicker').value = localDateTime;
 });
 
+// action on submitting the trigger dialog
 document.getElementById('triggerButton').addEventListener('click', function(event) {
 
   // check date is in the past
@@ -47,6 +50,7 @@ document.getElementById('triggerButton').addEventListener('click', function(even
   document.getElementById('triggerForm').submit();
 });
 
+// add the activity id to the correct trigger button card
 document.querySelectorAll('button[data-wdil]').forEach(button => {
   button.addEventListener('click', function() {
     // Get the value of data-wdil from the clicked button
@@ -54,4 +58,19 @@ document.querySelectorAll('button[data-wdil]').forEach(button => {
 
     document.getElementById('activityId').value = wdilValue;
   });
+});
+
+// action on clicking the show archived checkbox
+document.getElementById('showArchived').addEventListener('click', function(event) {
+  // Get the checkbox element
+  var checkbox = event.target;
+
+  // Check if the checkbox is checked or not
+  if (checkbox.checked) {
+      // If checked, redirect to a particular page
+      window.location.href = '/?state=1'; // Change to your desired URL
+  } else {
+      // If not checked, redirect to another page (or stay on the same page)
+      window.location.href = '/?state=0'; // Change to another URL if needed
+  }
 });
