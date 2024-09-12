@@ -155,7 +155,9 @@ switch ($cmd) {
             die;
         }
         $smarty->assign('activityName', $_SESSION['activities'][$id]['activityName']);
-        $smarty->assign('activityColour', $_SESSION['activities'][$id]['activityColour']);
+        if (isset($_SESSION['activities'][$id]['activityColour'])){
+            $smarty->assign('activityColour', $_SESSION['activities'][$id]['activityColour']);
+        }
         $smarty->assign('id', $id);
         $smarty->display('editActivity.tpl');
         break;
