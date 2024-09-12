@@ -127,12 +127,14 @@ switch ($cmd) {
             $_SESSION['activities'] = array();
             $_SESSION['activities'][0]['activityName'] = $_REQUEST['activityName'];
             $_SESSION['activities'][0]['period'] = $_REQUEST['period'];
+            $_SESSION['activities'][0]['activityColour'] = $_REQUEST['color'];
             $_SESSION['activities'][0]['triggers'] = array();
 
         }else{
             $i = count($_SESSION['activities']);
             $_SESSION['activities'][$i]['activityName'] = $_REQUEST['activityName'];
             $_SESSION['activities'][$i]['period'] = $_REQUEST['period'];
+            $_SESSION['activities'][$i]['activityColour'] = $_REQUEST['color'];
             $_SESSION['activities'][$i]['triggers'] = array();
         }
 
@@ -153,6 +155,7 @@ switch ($cmd) {
             die;
         }
         $smarty->assign('activityName', $_SESSION['activities'][$id]['activityName']);
+        $smarty->assign('activityColour', $_SESSION['activities'][$id]['activityColour']);
         $smarty->assign('id', $id);
         $smarty->display('editActivity.tpl');
         break;
@@ -160,6 +163,7 @@ switch ($cmd) {
     case 'updateActivity':
 
         $_SESSION['activities'][$id]['activityName'] = $_REQUEST['activityName'];
+        $_SESSION['activities'][$id]['activityColour'] = $_REQUEST['color'];
 
         // store the activities in the activities database file
         writeActivities($_SESSION['activities'], $_SESSION['database']);
@@ -406,6 +410,11 @@ switch ($cmd) {
             $users[$id]['show'] = $_REQUEST['state'];
             writeUsers($users);
             $_SESSION['show'] = $_REQUEST['state'];
+        }
+        if (isset($_REQUEST['colour'])){
+            $smarty->assign('colour', $_REQUEST['colour']);
+        }else{
+            $smarty->assign('colour', 'default');
         }
         $smarty->assign('archived', $_SESSION['show']);
         $smarty->display('home.tpl');

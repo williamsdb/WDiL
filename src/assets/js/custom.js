@@ -68,9 +68,27 @@ document.getElementById('showArchived').addEventListener('click', function(event
   // Check if the checkbox is checked or not
   if (checkbox.checked) {
       // If checked, redirect to a particular page
-      window.location.href = '/?state=1'; // Change to your desired URL
+      window.location.href = '/?state=1';
   } else {
       // If not checked, redirect to another page (or stay on the same page)
-      window.location.href = '/?state=0'; // Change to another URL if needed
+      window.location.href = '/?state=0'; 
   }
+});
+
+const colorContainer = document.querySelector('.color-container');
+let selectedColor = '';
+
+colorContainer.addEventListener('click', function(event) {
+    const clickedElement = event.target;
+    
+    // Check if the clicked element is a label or input and get the value
+    if (clickedElement.tagName === 'LABEL') {
+        const inputId = clickedElement.getAttribute('for');
+        const colorInput = document.getElementById(inputId);
+        selectedColor = colorInput.value;
+    } else if (clickedElement.tagName === 'INPUT') {
+        selectedColor = clickedElement.value;
+    }
+
+    window.location.href = '/?colour='+selectedColor; 
 });

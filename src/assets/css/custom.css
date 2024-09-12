@@ -117,3 +117,57 @@ body {
     outline: 0;
   }
   
+.color-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.color-option {
+    position: relative;
+}
+.color-input {
+    display: none;
+}
+.color-label {
+    width: 20px;
+    height: 20px;
+    border: 2px solid grey;
+    display: inline-block;
+    cursor: pointer;
+    transition: border 0.3s ease;
+}
+.color-input:checked + .color-label {
+    border: 2px solid black;
+}
+
+.footer-pink {
+  background-color: #f5e6e8;
+}
+
+.footer-peach {
+  background-color: #f5edd6;
+}
+
+.footer-mint {
+  background-color: #e9f5e6;
+}
+
+.footer-light-blue {
+  background-color: #d6f0f5;
+}
+
+.footer-lavender {
+  background-color: #f0e6f5;
+}
+
+.footer-lemon {
+  background-color: #f5f0d6;
+}
+
+.footer-aqua {
+  background-color: #e6f2f5;
+}
+
+.footer-beige {
+  background-color: #f5e6d6;
+}
