@@ -402,6 +402,71 @@ switch ($cmd) {
         $smarty->display('admin.tpl');
         break;
 
+    case 'stats':
+
+        $total = count($_SESSION['activities']);
+        $i=0;
+        $totTriggered=0;
+        $maxInterval=0;
+        $maxIntervalStr='';
+        $minInterval=99999999;
+        $minIntervalStr='';
+        $maxTimestamp=0;
+        $maxTimestampStr='';
+        $minTimestamp=9999999999;
+        $minTimestampStr='';
+        while ($i <= $total-1) {
+            // not interested if archived so ignore
+            if (!isset($_SESSION['activities'][$i]['archived']) || $_SESSION['activities'][$i]['archived']==0){
+                $totTriggered=$totTriggered+count($_SESSION['activities'][$i]['triggers']);
+                if (count($_SESSION['activities'][$i]['triggers'])>1){
+                    // Calculate intervals between consecutive timestamps
+                    $intervals = [];
+                    $totTriggers=count($_SESSION['activities'][$i]['triggers']);
+                    for ($j = 1; $j < $totTriggers; $j++) {
+                        $intervals[] = $_SESSION['activities'][$i]['triggers'][$j]['timestamp'] - $_SESSION['activities'][$i]['triggers'][$j - 1]['timestamp'];
+                    }
+    
+                    // Find the largest and smallest timestamps
+                    if ($totTriggers >0){
+                        if ($_SESSION['activities'][$i]['triggers'][$totTriggers-1]['timestamp'] > $maxTimestamp){
+                            $maxTimestampStr = $_SESSION['activities'][$i]['activityName'].' at '. smarty_modifier_date_format_tz($_SESSION['activities'][$i]['triggers'][$totTriggers-1]['timestamp'], "Y-m-d H:i:s", TZ);
+                            $maxTimestamp = $_SESSION['activities'][$i]['triggers'][$totTriggers-1]['timestamp'];    
+                        }
+                        if ($_SESSION['activities'][$i]['triggers'][$totTriggers-1]['timestamp'] < $minTimestamp){
+                            $minTimestampStr = $_SESSION['activities'][$i]['activityName'].' at '. smarty_modifier_date_format_tz($_SESSION['activities'][$i]['triggers'][$totTriggers-1]['timestamp'], 'Y-m-d H:i:s', TZ);
+                            $minTimestamp = $_SESSION['activities'][$i]['triggers'][$totTriggers-1]['timestamp'];    
+                        }    
+                    }
+    
+                    // Calculate the average interval
+                    $averageInterval = array_sum($intervals) / count($intervals);
+        
+                    // Find the largest and smallest intervals
+                    $largestInterval = max($intervals);
+                    if ($largestInterval > $maxInterval){
+                        $maxIntervalStr = $_SESSION['activities'][$i]['activityName'].' - '. formatTime($largestInterval, 0);
+                        $maxInterval = $largestInterval;
+                    } 
+                    $smallestInterval = min($intervals);
+                    if ($smallestInterval < $minInterval){
+                        $minIntervalStr = $_SESSION['activities'][$i]['activityName'].' - '. formatTime($smallestInterval, 0);
+                        $minInterval = $smallestInterval;
+                    } 
+                }    
+            }
+            $i++;
+        }
+
+        $smarty->assign('total', $total);
+        $smarty->assign('totTriggered', $totTriggered);
+        $smarty->assign('maxInterval', $maxIntervalStr);
+        $smarty->assign('minInterval', $minIntervalStr);
+        $smarty->assign('maxTimestamp', $maxTimestampStr);
+        $smarty->assign('minTimestamp', $minTimestampStr);
+        $smarty->display('stats.tpl');
+        break;
+
     case '':
 
         $_SESSION['activities'] = readActivities($_SESSION['database']);

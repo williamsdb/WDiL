@@ -99,6 +99,7 @@
 			{if $smarty.session.database|isset}
 				<ul class="nav nav-pills">
 					<li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+					<li class="nav-item"><a href="/stats" class="nav-link">Stats</a></li>
 					{if $smarty.const.ADMIN == $smarty.session.username}
 						<li class="nav-item"><a href="/admin" class="nav-link">Admin</a></li>
 					{/if}
