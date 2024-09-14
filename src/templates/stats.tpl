@@ -6,6 +6,7 @@
     <tbody>
         <tr><td><strong>Total activities</strong></td><td align="left">{$total}</td></tr>
         <tr><td><strong>Triggered a total of</strong></td><td align="left">{$totTriggered} times</td></tr>
+        <tr><td><strong>Never Triggered</strong></td><td>{$notTriggered}</td></tr>
         <tr><td><strong>Longest interval</strong></td><td>{$maxInterval}</td></tr>
         <tr><td><strong>Shortest interval</strong></td><td>{$minInterval}</td></tr>
         <tr><td><strong>Triggered most recently</strong></td><td>{$maxTimestamp}</td></tr>

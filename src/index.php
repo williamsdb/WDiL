@@ -415,6 +415,7 @@ switch ($cmd) {
         $maxTimestampStr='';
         $minTimestamp=9999999999;
         $minTimestampStr='';
+        $notTriggered=0;
         while ($i <= $total-1) {
             // not interested if archived so ignore
             if (!isset($_SESSION['activities'][$i]['archived']) || $_SESSION['activities'][$i]['archived']==0){
@@ -453,7 +454,9 @@ switch ($cmd) {
                         $minIntervalStr = $_SESSION['activities'][$i]['activityName'].' - '. formatTime($smallestInterval, 0);
                         $minInterval = $smallestInterval;
                     } 
-                }    
+                }else{
+                    $notTriggered++;
+                }  
             }
             $i++;
         }
@@ -464,6 +467,7 @@ switch ($cmd) {
         $smarty->assign('minInterval', $minIntervalStr);
         $smarty->assign('maxTimestamp', $maxTimestampStr);
         $smarty->assign('minTimestamp', $minTimestampStr);
+        $smarty->assign('notTriggered', $notTriggered);
         $smarty->display('stats.tpl');
         break;
 
