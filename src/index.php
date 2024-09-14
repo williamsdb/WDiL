@@ -420,7 +420,7 @@ switch ($cmd) {
             // not interested if archived so ignore
             if (!isset($_SESSION['activities'][$i]['archived']) || $_SESSION['activities'][$i]['archived']==0){
                 $totTriggered=$totTriggered+count($_SESSION['activities'][$i]['triggers']);
-                if (count($_SESSION['activities'][$i]['triggers'])>1){
+                if (count($_SESSION['activities'][$i]['triggers'])>=1){
                     // Calculate intervals between consecutive timestamps
                     $intervals = [];
                     $totTriggers=count($_SESSION['activities'][$i]['triggers']);
@@ -439,21 +439,20 @@ switch ($cmd) {
                             $minTimestamp = $_SESSION['activities'][$i]['triggers'][$totTriggers-1]['timestamp'];    
                         }    
                     }
-    
-                    // Calculate the average interval
-                    $averageInterval = array_sum($intervals) / count($intervals);
         
                     // Find the largest and smallest intervals
-                    $largestInterval = max($intervals);
-                    if ($largestInterval > $maxInterval){
-                        $maxIntervalStr = $_SESSION['activities'][$i]['activityName'].' - '. formatTime($largestInterval, 0);
-                        $maxInterval = $largestInterval;
-                    } 
-                    $smallestInterval = min($intervals);
-                    if ($smallestInterval < $minInterval){
-                        $minIntervalStr = $_SESSION['activities'][$i]['activityName'].' - '. formatTime($smallestInterval, 0);
-                        $minInterval = $smallestInterval;
-                    } 
+                    if(count($_SESSION['activities'][$i]['triggers'])>1){
+                        $largestInterval = max($intervals);
+                        if ($largestInterval > $maxInterval){
+                            $maxIntervalStr = $_SESSION['activities'][$i]['activityName'].' - '. formatTime($largestInterval, 0);
+                            $maxInterval = $largestInterval;
+                        } 
+                        $smallestInterval = min($intervals);
+                        if ($smallestInterval < $minInterval){
+                            $minIntervalStr = $_SESSION['activities'][$i]['activityName'].' - '. formatTime($smallestInterval, 0);
+                            $minInterval = $smallestInterval;
+                        }     
+                    }
                 }else{
                     $notTriggered++;
                 }  
