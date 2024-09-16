@@ -4,7 +4,7 @@
 
 	<div class="container">
 	<p><input type="checkbox" name="archived" id="showArchived" {if $archived ==1}checked{/if}> Show archived activites?<p>
-	<div class="color-container">
+	<div class="color-container" id="color-container">
         <div class="color-option">
             <input type="radio" id="color0" name="color" value="default" class="color-input" {if $activityColour == '' || $activityColour == 'default'}checked{/if} required>
             <label for="color0" class="color-label" style="background-color: #f5f5f5;" title="Light grey"></label>

@@ -5,7 +5,7 @@
   <div class="mb-3">
     <label for="activityName" class="form-label">Activity name</label>
     <input type="text" class="form-control" id="activityName" name="activityName" placeholder="activity name" required autofocus maxlength="100">
-    <div class="color-container">
+    <div class="color-container" id="color-container">
         <div class="color-option">
             <input type="radio" id="color0" name="color" value="default" class="color-input" checked required>
             <label for="color0" class="color-label" style="background-color: #f5f5f5;" title="Light grey"></label>
