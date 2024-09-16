@@ -126,6 +126,37 @@
             return round($seconds, $round) . ' seconds';
         }
     }
+
+    function sendMail($to, $subject, $body){
+        $mail = new PHPMailer(true);
+
+        try {
+            //Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            $mail->isSMTP();
+            $mail->Host       = SMTP_HOST;
+            $mail->SMTPAuth   = true;
+            $mail->Username   = SMTP_USER;
+            $mail->Password   = SMTP_PASS;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->Port       = SMTP_PORT;
+        
+            //Recipients
+            $mail->setFrom('from@example.com', 'Mailer');
+            $mail->addAddress('joe@example.net', 'Joe User');
+            $mail->addReplyTo('info@example.com', 'Information');
+                
+            //Content
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body    = $body;
+        
+            $mail->send();
+            return '';
+        } catch (Exception $e) {
+            return "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
+    }
     
     function array_to_html($val, $var=FALSE) {
         $do_nothing = true;

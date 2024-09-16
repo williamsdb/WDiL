@@ -33,8 +33,11 @@ try {
 }
 require 'functions.php';
 
-// set up Smarty
+// set up namespaces
 use Smarty\Smarty;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 $smarty = new Smarty();
 
@@ -240,9 +243,8 @@ switch ($cmd) {
         // store the activities in the activities database file
         writeActivities($_SESSION['activities'], $_SESSION['database']);
 
-        $smarty->assign('error', 'Activity deleted');
-        $smarty->assign('activities', $_SESSION['activities']);
-        $smarty->display('home.tpl');
+        $_SESSION['error'] = 'Activity deleted';
+        Header('Location: /');
 
         break;
 
@@ -404,7 +406,12 @@ switch ($cmd) {
 
     case 'stats':
 
-        $total = count($_SESSION['activities']);
+        // is there anything to produce any stats?
+        if (!empty($_SESSION['activities'])){
+            $total = count($_SESSION['activities']);
+        }else{
+            $total = 0;
+        }
         $i=0;
         $totTriggered=0;
         $maxInterval=0;
