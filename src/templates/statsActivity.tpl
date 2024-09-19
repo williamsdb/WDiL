@@ -8,12 +8,55 @@
         <tr><td><strong>Elapsed since last triggered</strong></td><td>{$elp}</td></tr>
         <tr><td><strong>Times triggered</strong></td><td>{$triggers|count}</td></tr>
         <tr><td><strong>Avg trigger interval</strong></td><td>{$avg}</td></tr>
+        <tr><td><strong>Trend</strong></td><td>{$trend}</td></tr>
         <tr><td><strong>Longest interval</strong></td><td>{$lrg}</td></tr>
     </tbody>
     </table>
 </table>
 
 <button type="button" class="btn btn-primary" data-wdil="{$id}" data-bs-toggle="modal" data-bs-target="#triggerModal">Trigger</button>
+
+<hr>
+<h4 style="margin-top: 10px;">Interval change over time</h4>
+{if $labels == ''}
+  <p>Not enough data</p>
+{else}
+  <canvas id="myChart"></canvas>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+      const ctx = document.getElementById('myChart').getContext('2d');
+      const myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+              labels: {$labels},
+              datasets: [{
+                  label: 'Intervals',
+                  data: {$data},
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 3
+              }]
+          },
+          options: {
+              scales: {
+                  x: {
+                      title: {
+                          display: true,
+                          text: 'Trigger Number' // Label for X-axis
+                      }
+                  },
+                  y: {
+                      title: {
+                          display: true,
+                          text: 'Time Interval (seconds)' // Label for Y-axis
+                      },
+                      beginAtZero: true // Start the Y-axis at zero
+                  }
+              }
+          }
+      });
+  </script>
+{/if}
 
 <!-- Bootstrap Modal -->
 <div class="modal fade" id="triggerModal" tabindex="-1" aria-labelledby="triggerModalLabel" aria-hidden="true">

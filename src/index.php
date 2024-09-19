@@ -35,9 +35,9 @@ require 'functions.php';
 
 // set up namespaces
 use Smarty\Smarty;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
+//use PHPMailer\PHPMailer\PHPMailer;
+//use PHPMailer\PHPMailer\SMTP;
+//use PHPMailer\PHPMailer\Exception;
 
 $smarty = new Smarty();
 
@@ -269,8 +269,29 @@ switch ($cmd) {
         if (count($_SESSION['activities'][$id]['triggers'])>1){
             // Calculate intervals between consecutive timestamps
             $intervals = [];
+            $labels = [];
             for ($i = 1; $i < count($_SESSION['activities'][$id]['triggers']); $i++) {
                 $intervals[] = $_SESSION['activities'][$id]['triggers'][$i]['timestamp'] - $_SESSION['activities'][$id]['triggers'][$i - 1]['timestamp'];
+                $labels[] = 'Trigger '.$i;
+            }
+
+            $smarty->assign('labels', json_encode($labels));
+            $smarty->assign('data', json_encode($intervals));
+
+            // Generate x values as indices for the intervals (1, 2, 3, ...)
+            $x_values = range(1, count($intervals));
+            
+            // Perform linear regression on the intervals
+            $result = linear_regression($x_values, $intervals);
+            $slope = $result['slope'];
+            
+            // Determine the trend based on the slope
+            if ($slope > 0) {
+                $smarty->assign('trend', "The intervals are generally increasing");
+            } elseif ($slope < 0) {
+                $smarty->assign('trend', "The intervals are generally decreasing");
+            } else {
+                $smarty->assign('trend', "The intervals are roughly constant");
             }
 
             // Calculate the average interval
@@ -283,7 +304,10 @@ switch ($cmd) {
             $smarty->assign('lrg', formatTime($largestInterval, 0));
         }else{
             $smarty->assign('avg', 'Not enough data');
-            $smarty->assign('lrg', 'Not enough data');    
+            $smarty->assign('lrg', 'Not enough data');
+            $smarty->assign('trend', 'Not enough data');
+            $smarty->assign('labels', '');
+            $smarty->assign('data', '');
         }
 
         // What's the elapsed time?

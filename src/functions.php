@@ -158,6 +158,26 @@
         }
     }
     
+    // Apply Linear Regression to determine the trend
+    function linear_regression($x, $y) {
+        $n = count($x);
+        $x_sum = array_sum($x);
+        $y_sum = array_sum($y);
+        
+        $xy_sum = 0;
+        $x_squared_sum = 0;
+        
+        for ($i = 0; $i < $n; $i++) {
+            $xy_sum += $x[$i] * $y[$i];
+            $x_squared_sum += $x[$i] * $x[$i];
+        }
+        
+        $slope = ($n * $xy_sum - $x_sum * $y_sum) / ($n * $x_squared_sum - $x_sum * $x_sum);
+        $intercept = ($y_sum - $slope * $x_sum) / $n;
+        
+        return ['slope' => $slope, 'intercept' => $intercept];
+    }
+
     function array_to_html($val, $var=FALSE) {
         $do_nothing = true;
         $indent_size = 20;
