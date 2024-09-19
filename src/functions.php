@@ -157,7 +157,7 @@
             return "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
     }
-    
+
     // Apply Linear Regression to determine the trend
     function linear_regression($x, $y) {
         $n = count($x);
@@ -172,7 +172,12 @@
             $x_squared_sum += $x[$i] * $x[$i];
         }
         
-        $slope = ($n * $xy_sum - $x_sum * $y_sum) / ($n * $x_squared_sum - $x_sum * $x_sum);
+        // Prevent division by zero
+        $denominator = ($n * $x_squared_sum - $x_sum * $x_sum);
+        if ($denominator == 0) {
+            return ['slope' => -1, 'intercept' => -1];
+        }
+        $slope = ($n * $xy_sum - $x_sum * $y_sum) / $denominator;
         $intercept = ($y_sum - $slope * $x_sum) / $n;
         
         return ['slope' => $slope, 'intercept' => $intercept];
