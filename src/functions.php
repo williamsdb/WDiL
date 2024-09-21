@@ -93,7 +93,7 @@
         }
     }
     
-    function formatTime($seconds, $round=2) {
+    function formatTime($seconds, $round=2, $label=TRUE) {
         $minutes = $seconds / 60;
         $hours = $minutes / 60;
         $days = $hours / 24;
@@ -101,29 +101,77 @@
         $years = $days / 365.25; // approximate years
 
         if ($years == 1) {
-            return round($years, $round) . ' year';
+            if ($label){
+                return round($years, $round) . ' year';
+            }else{
+                return round($years, $round);
+            }
         } elseif ($years > 1) {
-            return round($years, $round) . ' years';
+            if ($label){
+                return round($years, $round) . ' years';
+            }else{
+                return round($years, $round);
+            }
         } elseif ($months == 1) {
-            return round($months, $round) . ' month';
+            if ($label){
+                return round($months, $round) . ' month';
+            }else{
+                return round($months, $round);
+            }
         } elseif ($months > 1) {
-            return round($months, $round) . ' months';
+            if ($label){
+                return round($months, $round) . ' months';
+            }else{
+                return round($months, $round);
+            }
         } elseif ($days == 1) {
-            return round($days, $round) . ' day';
+            if ($label){
+                return round($days, $round) . ' day';
+            }else{
+                return round($days, $round);
+            }
         } elseif ($days > 1) {
-            return round($days, $round) . ' days';
+            if ($label){
+                return round($days, $round) . ' days';
+            }else{
+                return round($days, $round);
+            }
         } elseif ($hours == 1) {
-            return round($hours, $round) . ' hour';
+            if ($label){
+                return round($hours, $round) . ' hour';
+            }else{
+                return round($hours, $round);
+            }
         } elseif ($hours > 1) {
-            return round($hours, $round) . ' hours';
+            if ($label){
+                return round($hours, $round) . ' hours';
+            }else{
+                return round($hours, $round);
+            }
         } elseif ($minutes == 1) {
-            return round($minutes, $round) . ' minute';
+            if ($label){
+                return round($minutes, $round) . ' minute';
+            }else{
+                return round($minutes, $round);
+            }
         } elseif ($minutes > 1) {
-            return round($minutes, $round) . ' minutes';
+            if ($label){
+                return round($minutes, $round) . ' minutes';
+            }else{
+                return round($minutes, $round);
+            }
         } elseif ($seconds == 1) {
-            return round($seconds, $round) . ' second';
+            if ($label){
+                return round($seconds, $round) . ' second';
+            }else{
+                return round($seconds, $round);
+            }
         } else {
-            return round($seconds, $round) . ' seconds';
+            if ($label){
+                return round($seconds, $round) . ' seconds';
+            }else{
+                return round($seconds, $round);
+            }
         }
     }
 

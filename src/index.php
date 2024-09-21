@@ -216,6 +216,11 @@ switch ($cmd) {
 
     case 'archiveActivity':
 
+        // does the id exist?
+        if ($id>=count($_SESSION['activities'])){
+            Header('Location: /');
+        }
+
         if (!isset($_SESSION['activities'][$id]['archived']) || $_SESSION['activities'][$id]['archived']==0){
             $_SESSION['activities'][$id]['archived'] = 1;
         }else{
@@ -235,6 +240,11 @@ switch ($cmd) {
         break;
 
     case 'deleteActivity':
+
+        // does the id exist?
+        if ($id>=count($_SESSION['activities'])){
+            Header('Location: /');
+        }
 
         // delete the activity
         unset($_SESSION['activities'][$id]);
@@ -264,15 +274,22 @@ switch ($cmd) {
         break;
 
     case 'statsActivity':
+
+        // does the id exist?
+        if ($id>=count($_SESSION['activities'])){
+            Header('Location: /');
+        }
         
         // Do we have enough data for some stats?
         if (count($_SESSION['activities'][$id]['triggers'])>1){
             // Calculate intervals between consecutive timestamps
             $intervals = [];
             $labels = [];
+            $data = [];
             for ($i = 1; $i < count($_SESSION['activities'][$id]['triggers']); $i++) {
                 $intervals[] = $_SESSION['activities'][$id]['triggers'][$i]['timestamp'] - $_SESSION['activities'][$id]['triggers'][$i - 1]['timestamp'];
-                $labels[] = 'Trigger '.$i;
+                $labels[] = smarty_modifier_date_format_tz($_SESSION['activities'][$id]['triggers'][$i]['timestamp']);
+                $data[] = formatTime($intervals[$i-1], 0, TRUE);
             }
 
             $smarty->assign('labels', json_encode($labels));
@@ -302,6 +319,7 @@ switch ($cmd) {
 
             $smarty->assign('avg', formatTime($averageInterval, 0));
             $smarty->assign('lrg', formatTime($largestInterval, 0));
+            $smarty->assign('intervals', array_reverse($data, FALSE));
         }else{
             $smarty->assign('avg', 'Not enough data');
             $smarty->assign('lrg', 'Not enough data');

@@ -26,35 +26,48 @@
   <script>
       const ctx = document.getElementById('myChart').getContext('2d');
       const myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-              labels: {$labels},
-              datasets: [{
-                  label: 'Intervals',
-                  data: {$data},
-                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                  borderColor: 'rgba(75, 192, 192, 1)',
-                  borderWidth: 3
-              }]
-          },
-          options: {
-              scales: {
-                  x: {
-                      title: {
-                          display: true,
-                          text: 'Trigger Number' // Label for X-axis
-                      }
-                  },
-                  y: {
-                      title: {
-                          display: true,
-                          text: 'Time Interval (seconds)' // Label for Y-axis
-                      },
-                      beginAtZero: true // Start the Y-axis at zero
-                  }
-              }
-          }
-      });
+        type: 'line',
+        data: {
+            labels: {$labels},
+            datasets: [{
+                label: 'Interval',
+                data: {$data},  // These are seconds
+                backgroundColor: '#0d6efd',
+                borderColor: '#0d6efd',
+                borderWidth: 3
+            }]
+        },
+        options: {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            // Get the value in seconds
+                            var valueInSeconds = tooltipItem.raw;
+
+                            // Use the formatTime function to format the seconds into a human-readable format
+                            return formatTime(valueInSeconds);
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Trigger Date and Time' // Label for X-axis
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Time Interval (seconds)' // Label for Y-axis
+                    },
+                    beginAtZero: true // Start the Y-axis at zero
+                }
+            }
+        }
+    });
   </script>
 {/if}
 
@@ -92,6 +105,7 @@
     <thead>
         <tr>
             <th>Date & time</th>
+            <th>Interval to previous</th>
         </tr>
     </thead>
     <tbody>
@@ -99,12 +113,21 @@
             {if $smarty.foreach.foo.index == 10}
             {break}
             {/if}
-			<tr><td>{$trigger.timestamp|date_format_tz:"Y-m-d H:i:s":$smarty.const.TZ}</td><td align="right"><a href="#" onclick="confirmRedirect('/deleteTrigger/{$id}/{$i}'); return false;"><i class="bi-trash"></i></a></td></tr>
-        {/foreach}
+            <tr>
+                <td>{$trigger.timestamp|date_format_tz:"Y-m-d H:i:s":$smarty.const.TZ}</td>
+                {if $smarty.foreach.foo.index < $smarty.foreach.foo.total-1}
+                    <td>{$intervals[$smarty.foreach.foo.index]}</td>
+                {else}
+                    <td>&nbsp;</td>
+                {/if}
+                <td align="right"><a href="#" onclick="confirmRedirect('/deleteTrigger/{$id}/{$i}'); return false;"><i class="bi-trash"></i></a></td>
+            </tr>
+            {/foreach}
     </tbody>
     <tfoot>
         <tr>
             <th>Date & time</th>
+            <th>Interval to previous</th>
         </tr>
     </tfoot>
     </table>

@@ -100,3 +100,25 @@ if (document.getElementById('colorContainer')){
       window.location.href = '/?colour='+selectedColor; 
   });  
 }
+
+function formatTime(seconds, round = 2, label = true) {
+  let minutes = seconds / 60;
+  let hours = minutes / 60;
+  let days = hours / 24;
+  let months = days / 30.44; // approximate months
+  let years = days / 365.25; // approximate years
+
+  if (years >= 1) {
+      return `${years.toFixed(round)} year${years > 1 ? 's' : ''}`;
+  } else if (months >= 1) {
+      return `${months.toFixed(round)} month${months > 1 ? 's' : ''}`;
+  } else if (days >= 1) {
+      return `${days.toFixed(round)} day${days > 1 ? 's' : ''}`;
+  } else if (hours >= 1) {
+      return `${hours.toFixed(round)} hour${hours > 1 ? 's' : ''}`;
+  } else if (minutes >= 1) {
+      return `${minutes.toFixed(round)} minute${minutes > 1 ? 's' : ''}`;
+  } else {
+      return `${seconds.toFixed(round)} second${seconds > 1 ? 's' : ''}`;
+  }
+}
