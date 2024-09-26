@@ -35,9 +35,9 @@ require 'functions.php';
 
 // set up namespaces
 use Smarty\Smarty;
-//use PHPMailer\PHPMailer\PHPMailer;
-//use PHPMailer\PHPMailer\SMTP;
-//use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 $smarty = new Smarty();
 
@@ -66,7 +66,7 @@ if (isset($path_segments[2])){
 }
 
 // are we logged in?
-If (!isset($_SESSION['database']) && $cmd != 'login' &&  $cmd != 'loginUser' && $cmd != 'register' &&  $cmd != 'registerUser'){
+If (!isset($_SESSION['database']) && $cmd != 'login' &&  $cmd != 'loginUser' && $cmd != 'register' &&  $cmd != 'registerUser' &&  $cmd != 'forgot' &&  $cmd != 'forgotPass'){
     Header('Location: /login');
     die;
 }
@@ -425,6 +425,30 @@ switch ($cmd) {
         }
         writeUsers($users);
         $smarty->assign('error', 'User created. Please login');
+        $smarty->display('login.tpl');
+        break;
+
+    case 'forgot':
+
+        $smarty->display('forgot.tpl');
+        break;
+
+    case 'forgotPass':
+
+        // if user found set database
+        $users = readUsers();
+        if (strpos($_REQUEST['email'],'@')){
+            $id = searchEmail($users, $_REQUEST['email']);
+        }else{
+            $id = searchUsername($users, $_REQUEST['email']);
+        }
+
+        if ($id != -1){
+            // account found so send email
+            sendMail($_REQUEST['email'], 'Reset your password', 'Here\'s how');
+        }
+
+        $smarty->assign('error', 'If an account has been found an email has been sent to you with further instructions');
         $smarty->display('login.tpl');
         break;
 

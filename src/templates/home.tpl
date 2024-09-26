@@ -50,7 +50,7 @@
 				{assign var="count" value=$count+1}
 				<div class="col-12 col-md-6 col-lg-4 mb-4 d-flex align-items-stretch">
 					<div class="card" style="width: 100%;">
-					<div class="card-body">
+			<div class="card-body" {if $activities[all].triggers|count > 0}onclick="window.location.href='/statsActivity/{$smarty.section.all.index}'" style="cursor:pointer;"{/if}>
 						<h5 class="card-title">{$activities[all].activityName}</h5>
 						{if $activities[all].triggers|count > 0}
 						{assign var="latestTimestamp" value=$activities[all].triggers[$activities[all].triggers|count - 1].timestamp}

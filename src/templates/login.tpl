@@ -14,7 +14,7 @@
 
   <p>&nbsp;</p>
   <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
-  <p><a href="/register">Need an account? Register here.</a></p>
+  <p><a href="/register">Need an account? Register here.</a>&nbsp;&nbsp;<a href="/forgot">Forgotten your password?</a></p>
 </form>
 
 {include file="footer.tpl"}
