@@ -35,9 +35,6 @@ require 'functions.php';
 
 // set up namespaces
 use Smarty\Smarty;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
 
 $smarty = new Smarty();
 
@@ -66,7 +63,7 @@ if (isset($path_segments[2])){
 }
 
 // are we logged in?
-If (!isset($_SESSION['database']) && $cmd != 'login' &&  $cmd != 'loginUser' && $cmd != 'register' &&  $cmd != 'registerUser' &&  $cmd != 'forgot' &&  $cmd != 'forgotPass'){
+If (!isset($_SESSION['database']) && $cmd != 'login' &&  $cmd != 'loginUser' && $cmd != 'register' &&  $cmd != 'registerUser' &&  $cmd != 'forgot' &&  $cmd != 'forgotPass' &&  $cmd != 'resetPassword' &&  $cmd != 'changePassword'){
     Header('Location: /login');
     die;
 }
@@ -279,7 +276,10 @@ switch ($cmd) {
         if ($id>=count($_SESSION['activities'])){
             Header('Location: /');
         }
-        
+
+        $timezoneOffset = timezone_offset_get(new DateTimeZone(TZ), new DateTime());
+        $localTimestamp = $_SESSION['activities'][$id]['triggers'][count($_SESSION['activities'][$id]['triggers']) - 1]['timestamp'];
+
         // Do we have enough data for some stats?
         if (count($_SESSION['activities'][$id]['triggers'])>1){
             // Calculate intervals between consecutive timestamps
@@ -317,11 +317,19 @@ switch ($cmd) {
             // Find the largest interval
             $largestInterval = max($intervals);
 
+            // calculate the next trigger
+            $lastTrigger = $_SESSION['activities'][$id]['triggers'][count($_SESSION['activities'][$id]['triggers'])-1]['timestamp'];
+            $enp =  $lastTrigger + $averageInterval;
+            $enpt = $enp - $localTimestamp;
+
+            $smarty->assign('enp', smarty_modifier_date_format_tz($enp, "Y-m-d H:i:s", TZ).' in '.formatTime($enpt, 0));
+    
             $smarty->assign('avg', formatTime($averageInterval, 0));
             $smarty->assign('lrg', formatTime($largestInterval, 0));
             $smarty->assign('intervals', array_reverse($data, FALSE));
         }else{
             $smarty->assign('avg', 'Not enough data');
+            $smarty->assign('enp', 'Not enough data');
             $smarty->assign('lrg', 'Not enough data');
             $smarty->assign('trend', 'Not enough data');
             $smarty->assign('labels', '');
@@ -329,8 +337,6 @@ switch ($cmd) {
         }
 
         // What's the elapsed time?
-        $timezoneOffset = timezone_offset_get(new DateTimeZone(TZ), new DateTime());
-        $localTimestamp = $_SESSION['activities'][$id]['triggers'][count($_SESSION['activities'][$id]['triggers']) - 1]['timestamp'];
         $smarty->assign('elp', formatTime(time() - $localTimestamp, 0));
 
         $smarty->assign('activityName', $_SESSION['activities'][$id]['activityName']);
@@ -370,6 +376,11 @@ switch ($cmd) {
                 }else{
                     $_SESSION['show'] = 1;
                 }
+
+                // reset the guid
+                $users[$id]['guid'] = '';
+                writeUsers($users);
+
                 Header('Location: /');   
                 die;
             } else {
@@ -414,6 +425,7 @@ switch ($cmd) {
             $users[0]['username'] = $_REQUEST['username'];
             $users[0]['password'] = $pwd;
             $users[0]['show'] = 1;
+            $users[0]['guid'] = '';
             file_put_contents('./databases/'.$_REQUEST['username'].'.db','');
         }else{
             $i = count($users);
@@ -421,6 +433,7 @@ switch ($cmd) {
             $users[$i]['username'] = $_REQUEST['username'];
             $users[$i]['password'] = $pwd;
             $users[$i]['show'] = 1;
+            $users[$i]['guid'] = '';
             file_put_contents('./databases/'.$_REQUEST['username'].'.db','');
         }
         writeUsers($users);
@@ -437,23 +450,50 @@ switch ($cmd) {
 
         // if user found set database
         $users = readUsers();
-        if (strpos($_REQUEST['email'],'@')){
-            $id = searchEmail($users, $_REQUEST['email']);
-        }else{
-            $id = searchUsername($users, $_REQUEST['email']);
-        }
+        $id = searchEmail($users, $_REQUEST['email']);
 
         if ($id != -1){
+            $uuid = uniqid();
+            $data['guid'] = protocol().$_SERVER['SERVER_NAME'].'/resetPassword/'.$id.'-'.$uuid;
+            $body = $smarty->fetch( 'email-forgotten-password.tpl', $data );
+
+            // store the id
+            $users[$id]['guid'] = $uuid;
+            writeUsers($users);
+
             // account found so send email
-            sendMail($_REQUEST['email'], 'Reset your password', 'Here\'s how');
+            sendMail($_REQUEST['email'], 'Reset your password', $body);
         }
 
         $smarty->assign('error', 'If an account has been found an email has been sent to you with further instructions');
         $smarty->display('login.tpl');
         break;
 
+    case 'resetPassword':
+
+        $users = readUsers();
+        $code = explode('-',$id);
+
+        if ($code[1] != $users[$code[0]]['guid']){
+            Header('Location: /');   
+            die;
+        }else{
+            $smarty->assign('id', $code[0]);
+            $smarty->display('resetPassword.tpl');
+        }
+        break;
+
+    case 'changePassword':
+
+        $users = readUsers();
+
+        $smarty->assign('error', 'Your password has been changed');
+        $smarty->display('login.tpl');
+        break;
+
     case 'logout':
         unset($_SESSION['database']);
+        unset($_SESSION['username']);
         session_destroy();
         $smarty->display('login.tpl');
         break;
@@ -564,10 +604,17 @@ switch ($cmd) {
         break;
 
     default:
+
         # command not recognised
-        $smarty->assign('error', 'Command not recognised');
-        $smarty->assign('activities', $_SESSION['activities']);
-        $smarty->display('home.tpl');
+        if (isset($_SESSION['database'])){
+            $smarty->assign('error', 'Command not recognised');
+            $smarty->assign('activities', $_SESSION['activities']);
+            $smarty->display('home.tpl');
+        }else{
+            Header('Location: /login');
+            die;
+        }
+        
         break;
 }
 

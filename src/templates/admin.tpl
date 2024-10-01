@@ -3,9 +3,9 @@
 <table class="table table-striped">
 <thead>
 	<tr>
-	<th>Username</th>
-	<th>Email</th>
-	<th>Actions</th>
+		<th>Username</th>
+		<th>Email</th>
+		<th>Actions</th>
 	</tr>
 </thead>
 <tbody>
@@ -20,8 +20,8 @@
 </tbody>
 <tfoot>
 	<tr>
-	<th>Username</th>
-	<th>Email</th>
+		<th>Username</th>
+		<th>Email</th>
 		<th>Actions</th>
 	</tr>
 </tfoot>

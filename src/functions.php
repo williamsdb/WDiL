@@ -183,7 +183,7 @@ use PHPMailer\PHPMailer\Exception;
 
         try {
             //Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+//            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
             $mail->isSMTP();
             $mail->Host       = SMTP_HOST;
             $mail->SMTPAuth   = true;
@@ -193,9 +193,9 @@ use PHPMailer\PHPMailer\Exception;
             $mail->Port       = SMTP_PORT;
         
             //Recipients
-            $mail->setFrom('from@example.com', 'Mailer');
-            $mail->addAddress('joe@example.net', 'Joe User');
-            $mail->addReplyTo('info@example.com', 'Information');
+            $mail->setFrom('neil@ammatconsulting.com', 'WDiL Admin');
+            $mail->addAddress($to, 'Hello!');
+            $mail->addReplyTo('neil@ammatconsulting.com', 'WDiL Admin');
                 
             //Content
             $mail->isHTML(true);
@@ -209,6 +209,17 @@ use PHPMailer\PHPMailer\Exception;
         }
     }
 
+    function protocol(){
+        if (isset($_SERVER['HTTPS']) &&
+            ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) ||
+            isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
+            $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+            return 'https://';
+        }else{
+            return 'http://';
+        }
+    }
+    
     // Apply Linear Regression to determine the trend
     function linear_regression($x, $y) {
         $n = count($x);

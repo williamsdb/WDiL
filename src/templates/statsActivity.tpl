@@ -6,6 +6,7 @@
     <tbody>
         <tr><td><strong>Last triggered</strong></td><td>{$triggers[$triggers|count - 1].timestamp|date_format_tz:"Y-m-d H:i:s":$smarty.const.TZ}</td></tr>
         <tr><td><strong>Elapsed since last triggered</strong></td><td>{$elp}</td></tr>
+        <tr><td><strong>Estimated until next trigger</strong></td><td>{$enp}</td></tr>
         <tr><td><strong>Times triggered</strong></td><td>{$triggers|count}</td></tr>
         <tr><td><strong>Avg trigger interval</strong></td><td>{$avg}</td></tr>
         <tr><td><strong>Trend</strong></td><td>{$trend}</td></tr>
