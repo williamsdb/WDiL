@@ -86,6 +86,8 @@
 				<label for="datetimePicker" class="form-label">Select Date and Time</label>
 				<input type="datetime-local" class="form-control" name="dateTime" step="1" id="datetimePicker" required>
 				<div id="error-message" style="color: red; display: none;">The date must be in the past.</div>
+				<label for="triggerComment" class="form-label" style="margin-top: 10px;">Comment (optional)</label>
+				<input type="text" class="form-control" name="comment" id="triggerComment" maxlength="50">
 				<input type="hidden" class="form-control" name="activityId" id="activityId" value="{$id}">
 				<input type="hidden" class="form-control" name="redirectTo" id="redirectTo" value="stats">
 			</div>
@@ -106,6 +108,7 @@
     <thead>
         <tr>
             <th>Date & time</th>
+            <th>Comment</th>
             <th>Interval to previous</th>
         </tr>
     </thead>
@@ -115,11 +118,18 @@
             {break}
             {/if}
             <tr>
-                <td>{$trigger.timestamp|date_format_tz:"Y-m-d H:i:s":$smarty.const.TZ}</td>
+                <td width="20%">{$trigger.timestamp|date_format_tz:"Y-m-d H:i:s":$smarty.const.TZ}</td>
+                <td>
+                    {if isset($trigger.comment)}
+                        {$trigger.comment}
+                    {else}
+                        &nbsp;
+                    {/if}
+                </td>
                 {if $smarty.foreach.foo.index < $smarty.foreach.foo.total-1}
-                    <td>{$intervals[$smarty.foreach.foo.index]}</td>
+                    <td width="20%">{$intervals[$smarty.foreach.foo.index]}</td>
                 {else}
-                    <td>&nbsp;</td>
+                    <td width="20%">&nbsp;</td>
                 {/if}
                 <td align="right"><a href="#" onclick="confirmRedirect('/deleteTrigger/{$id}/{$i}'); return false;"><i class="bi-trash"></i></a></td>
             </tr>
@@ -128,6 +138,7 @@
     <tfoot>
         <tr>
             <th>Date & time</th>
+            <th>Comment</th>
             <th>Interval to previous</th>
         </tr>
     </tfoot>

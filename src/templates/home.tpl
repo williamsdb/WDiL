@@ -4,7 +4,7 @@
 
 	<div class="container">
 	<p><input type="checkbox" name="archived" id="showArchived" {if $archived ==1}checked{/if}> Show archived activites?<p>
-	<div class="color-container" id="color-container">
+	<div class="color-container" id="colorContainer">
         <div class="color-option">
             <input type="radio" id="color0" name="color" value="default" class="color-input" {if $activityColour == '' || $activityColour == 'default'}checked{/if} required>
             <label for="color0" class="color-label" style="background-color: #f5f5f5;" title="Light grey"></label>
@@ -104,6 +104,8 @@
 				<label for="datetimePicker" class="form-label">Select Date and Time</label>
 				<input type="datetime-local" class="form-control" name="dateTime" step="1" id="datetimePicker" required>
 				<div id="error-message" style="color: red; display: none;">The date must be in the past.</div>
+				<label for="triggerComment" class="form-label" style="margin-top: 10px;">Comment (optional)</label>
+				<input type="text" class="form-control" name="comment" id="triggerComment" maxlength="50">
 				<input type="hidden" class="form-control" name="activityId" id="activityId" value="">
 				<input type="hidden" class="form-control" name="redirectTo" id="redirectTo" value="home">
 			</div>

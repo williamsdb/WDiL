@@ -84,7 +84,7 @@ if (document.getElementById('showArchived')){
 if (document.getElementById('colorContainer')){
   const colorContainer = document.querySelector('.color-container');
   let selectedColor = '';
-  
+  console.log('colour='.selectedColor);
   colorContainer.addEventListener('click', function(event) {
       const clickedElement = event.target;
       

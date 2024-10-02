@@ -192,10 +192,11 @@ switch ($cmd) {
         $i = count($_SESSION['activities'][$_REQUEST['activityId']]['triggers']);
         $timezoneOffset = timezone_offset_get(new DateTimeZone(TZ), new DateTime());
         $_SESSION['activities'][$_REQUEST['activityId']]['triggers'][$i]['timestamp'] = strtotime($_REQUEST['dateTime'])-$timezoneOffset;
+        $_SESSION['activities'][$_REQUEST['activityId']]['triggers'][$i]['comment'] = $_REQUEST['comment'];
 
         // sort the array into time order
         usort($_SESSION['activities'][$_REQUEST['activityId']]['triggers'], function ($a, $b) {
-            return $a['timestamp'] <=> $b['timestamp']; // Spaceship operator for comparison
+            return $a['timestamp'] <=> $b['timestamp']; 
         });
 
         // store the activities in the activities database file
