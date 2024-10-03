@@ -484,6 +484,7 @@ switch ($cmd) {
             die;
         }else{
             $smarty->assign('id', $code[0]);
+            $smarty->assign('code', $code[1]);
             $smarty->display('resetPassword.tpl');
         }
         break;
@@ -492,8 +493,25 @@ switch ($cmd) {
 
         $users = readUsers();
 
-        $smarty->assign('error', 'Your password has been changed');
-        $smarty->display('login.tpl');
+        if ($_REQUEST['code'] != $users[$_REQUEST['id']]['guid']){
+            Header('Location: /');   
+            die;
+        }elseif ($_REQUEST['password'] != $_REQUEST['passwordConf']){
+            $smarty->assign('error', 'Passwords do not match');
+            $smarty->assign('id', $_REQUEST['id']);
+            $smarty->assign('code', $_REQUEST['code']);
+            $smarty->display('resetPassword.tpl');
+            $smarty->display('resetPassword.tpl');
+            break;
+        }else{
+            $pwd = password_hash($_REQUEST['password'], PASSWORD_DEFAULT);
+            $users[$_REQUEST['id']]['password'] = $pwd;
+            $users[$_REQUEST['id']]['guid'] = '';
+            writeUsers($users);
+            $smarty->assign('error', 'Your password has been changed');
+            $smarty->display('login.tpl');
+        }
+
         break;
 
     case 'logout':

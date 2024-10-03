@@ -9,13 +9,14 @@
     <label for="floatingInput">New Password</label>
   </div>
 
-  <div class="form-floating">
+  <div class="form-floating" style="margin-top: 10px;">
     <input type="password" name="passwordConf" required class="form-control" id="floatingInput" placeholder="reenter your new password">
     <label for="floatingInput">Confirm Password</label>
   </div>
 
-  <p>&nbsp;</p>
-  <button class="btn btn-primary w-100 py-2" type="submit">Reset Password</button>
+  <input type="hidden" value="{$id}" name="id">
+  <input type="hidden" value="{$code}" name="code">
+  <button class="btn btn-primary w-100 py-2" type="submit" style="margin-top: 10px;">Reset Password</button>
 </form>
 
 {include file="footer.tpl"}
