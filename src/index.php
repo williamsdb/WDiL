@@ -321,9 +321,13 @@ switch ($cmd) {
             // calculate the next trigger
             $lastTrigger = $_SESSION['activities'][$id]['triggers'][count($_SESSION['activities'][$id]['triggers'])-1]['timestamp'];
             $enp =  $lastTrigger + $averageInterval;
-            $enpt = $enp - $localTimestamp;
+            $enpt = $enp - time();
 
-            $smarty->assign('enp', smarty_modifier_date_format_tz($enp, "Y-m-d H:i:s", TZ).' in '.formatTime($enpt, 0));
+            if ($enpt < 0){
+                $smarty->assign('enp', smarty_modifier_date_format_tz($enp, "Y-m-d H:i:s", TZ).' <span style="color: red">overdue by '.formatTime(time()- $enp, 0).'</span>');
+            }else{
+                $smarty->assign('enp', smarty_modifier_date_format_tz($enp, "Y-m-d H:i:s", TZ).' in '.formatTime($enpt, 0));
+            }
     
             $smarty->assign('avg', formatTime($averageInterval, 0));
             $smarty->assign('lrg', formatTime($largestInterval, 0));

@@ -1,6 +1,6 @@
 {include file="header.tpl"}
 
-<h3>Statistics for "{$activityName}"</h3>
+<h3>When did I last {$activityName}?</h3>
 
 <table class="table table-striped">
     <tbody>
