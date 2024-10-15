@@ -110,6 +110,7 @@
             <th>Date & time</th>
             <th>Comment</th>
             <th>Interval to previous</th>
+            <th> </th>
         </tr>
     </thead>
     <tbody>
@@ -140,6 +141,7 @@
             <th>Date & time</th>
             <th>Comment</th>
             <th>Interval to previous</th>
+            <th> </th>
         </tr>
     </tfoot>
     </table>

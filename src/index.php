@@ -123,12 +123,19 @@ switch ($cmd) {
 
     case 'createActivity':
 
+        // is this the first activity?
         if (!isset($_SESSION['activities']) || !is_array($_SESSION['activities'])) {
             $_SESSION['activities'] = array();
             $_SESSION['activities'][0]['activityName'] = $_REQUEST['activityName'];
             $_SESSION['activities'][0]['period'] = $_REQUEST['period'];
             $_SESSION['activities'][0]['activityColour'] = $_REQUEST['color'];
             $_SESSION['activities'][0]['triggers'] = array();
+            if (isset($_REQUEST['notifications'])){
+                $_SESSION['activities'][0]['notifications'] = TRUE; 
+            }else{
+                $_SESSION['activities'][0]['notifications'] = FALSE;
+            }
+            $_SESSION['activities'][0]['notificationTriggered'] = FALSE;
 
         }else{
             $i = count($_SESSION['activities']);
@@ -136,6 +143,12 @@ switch ($cmd) {
             $_SESSION['activities'][$i]['period'] = $_REQUEST['period'];
             $_SESSION['activities'][$i]['activityColour'] = $_REQUEST['color'];
             $_SESSION['activities'][$i]['triggers'] = array();
+            if (isset($_REQUEST['notifications'])){
+                $_SESSION['activities'][$i]['notifications'] = TRUE; 
+            }else{
+                $_SESSION['activities'][$i]['notifications'] = FALSE;
+            }
+            $_SESSION['activities'][$i]['notificationTriggered'] = FALSE;
         }
 
         // store the activities in the activities database file
@@ -158,6 +171,11 @@ switch ($cmd) {
         if (isset($_SESSION['activities'][$id]['activityColour'])){
             $smarty->assign('activityColour', $_SESSION['activities'][$id]['activityColour']);
         }
+        if (isset($_SESSION['activities'][$id]['notifications']) && $_SESSION['activities'][$id]['notifications'] == TRUE){
+            $smarty->assign('notifications', TRUE); 
+        }else{
+            $smarty->assign('notifications', FALSE); 
+        }
         $smarty->assign('id', $id);
         $smarty->display('editActivity.tpl');
         break;
@@ -166,6 +184,11 @@ switch ($cmd) {
 
         $_SESSION['activities'][$id]['activityName'] = $_REQUEST['activityName'];
         $_SESSION['activities'][$id]['activityColour'] = $_REQUEST['color'];
+        if (isset($_REQUEST['notifications'])){
+            $_SESSION['activities'][$id]['notifications'] = TRUE;
+        }else{
+            $_SESSION['activities'][$id]['notifications'] = FALSE;
+        }
 
         // store the activities in the activities database file
         writeActivities($_SESSION['activities'], $_SESSION['database']);
@@ -193,6 +216,8 @@ switch ($cmd) {
         $timezoneOffset = timezone_offset_get(new DateTimeZone(TZ), new DateTime());
         $_SESSION['activities'][$_REQUEST['activityId']]['triggers'][$i]['timestamp'] = strtotime($_REQUEST['dateTime'])-$timezoneOffset;
         $_SESSION['activities'][$_REQUEST['activityId']]['triggers'][$i]['comment'] = $_REQUEST['comment'];
+        // reset the notification
+        $_SESSION['activities'][$_REQUEST['activityId']]['notificationTriggered'] = FALSE;
 
         // sort the array into time order
         usort($_SESSION['activities'][$_REQUEST['activityId']]['triggers'], function ($a, $b) {
@@ -558,11 +583,7 @@ switch ($cmd) {
                 $totTriggered=$totTriggered+count($_SESSION['activities'][$i]['triggers']);
                 if (count($_SESSION['activities'][$i]['triggers'])>=1){
                     // Calculate intervals between consecutive timestamps
-                    $intervals = [];
-                    $totTriggers=count($_SESSION['activities'][$i]['triggers']);
-                    for ($j = 1; $j < $totTriggers; $j++) {
-                        $intervals[] = $_SESSION['activities'][$i]['triggers'][$j]['timestamp'] - $_SESSION['activities'][$i]['triggers'][$j - 1]['timestamp'];
-                    }
+                    $intervals = calculateIntervals($_SESSION['activities'][$i]);
     
                     // Find the largest and smallest timestamps
                     if ($totTriggers >0){

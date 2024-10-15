@@ -74,6 +74,40 @@ use PHPMailer\PHPMailer\Exception;
         }
 
     }
+
+    function calculateIntervals($activities){
+
+        // Calculate intervals between consecutive timestamps
+        $intervals = [];
+        $totTriggers=count($activities['triggers']);
+        for ($j = 1; $j < $totTriggers; $j++) {
+            $intervals[] = $activities['triggers'][$j]['timestamp'] - $activities['triggers'][$j - 1]['timestamp'];
+        }
+
+        return $intervals;
+
+    }
+
+    function pushover($message, $token, $user) {
+
+        // only bother if Pushover details set in config
+        if (empty($token) || empty($user)) die;
+
+        // Send to PushOver
+        curl_setopt_array($ch = curl_init(), array(
+            CURLOPT_URL => "https://api.pushover.net/1/messages.json",
+            CURLOPT_POSTFIELDS => array(
+            "token" => $token,
+            "user" => $user,
+            "message" => $message,
+            ),
+        ));
+        curl_exec($ch);
+        curl_close($ch);
+
+        return;
+    }
+
     function smarty_modifier_date_format_tz($input, $format = "Y-m-d H:i:s", $timezone = 'UTC') {
         try {
             if ($input instanceof DateTime) {

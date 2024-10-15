@@ -43,7 +43,9 @@
             <label for="color8" class="color-label" style="background-color: #f5e6d6;" title="Beige"></label>
         </div>
     </div>
-  </div>
+    <label for="notification" class="form-label">Send Notifications?</label>
+    <input type="checkbox" name="notifications" {if $notifications}checked{/if} class="cm-toggle">
+    </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 
 </form>
