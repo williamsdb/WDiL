@@ -584,9 +584,10 @@ switch ($cmd) {
                 if (count($_SESSION['activities'][$i]['triggers'])>=1){
                     // Calculate intervals between consecutive timestamps
                     $intervals = calculateIntervals($_SESSION['activities'][$i]);
+                    $totTriggers=count($_SESSION['activities'][$i]['triggers']);
     
                     // Find the largest and smallest timestamps
-                    if ($totTriggers >0){
+                    if ($totTriggers > 0){
                         if ($_SESSION['activities'][$i]['triggers'][$totTriggers-1]['timestamp'] > $maxTimestamp){
                             $maxTimestampStr = $_SESSION['activities'][$i]['activityName'].' at '. smarty_modifier_date_format_tz($_SESSION['activities'][$i]['triggers'][$totTriggers-1]['timestamp'], "Y-m-d H:i:s", TZ);
                             $maxTimestamp = $_SESSION['activities'][$i]['triggers'][$totTriggers-1]['timestamp'];    
