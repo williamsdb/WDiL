@@ -18,8 +18,6 @@
 // turn off reporting of notices
 error_reporting(0);
 ini_set('display_errors', 0);
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 // session start
 session_start();
@@ -556,6 +554,40 @@ switch ($cmd) {
 
         $smarty->assign('users', readUsers());
         $smarty->display('admin.tpl');
+        break;
+
+    case 'account':
+
+        $users = readUsers();
+        $id = searchUsername($users, $_SESSION['username']);
+
+        $smarty->assign('email', $users[$id]['email']);
+        $smarty->assign('username', $users[$id]['username']);
+        if (isset($users[$id]['pushoverToken'])){
+            $smarty->assign('token', $users[$id]['pushoverToken']);
+        }else{
+            $smarty->assign('token', '');
+        }
+        if (isset($users[$id]['pushoverUser'])){
+            $smarty->assign('user', $users[$id]['pushoverUser']);
+        }else{
+            $smarty->assign('user', '');
+        }
+        $smarty->display('account.tpl');
+        break;
+
+    case 'updateAccount':
+
+        $users = readUsers();
+        $id = searchUsername($users, $_SESSION['username']);
+
+        $users[$id]['pushoverToken'] = $_REQUEST['token'];
+        $users[$id]['pushoverUser'] = $_REQUEST['user'];
+        writeUsers($users);
+
+        $_SESSION['error'] = 'Your account has been updated';
+		Header('Location: /');
+
         break;
 
     case 'stats':

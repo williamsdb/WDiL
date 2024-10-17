@@ -39,9 +39,6 @@ $smarty->setCacheDir('cache');
 $smarty->setConfigDir('configs');
 $smarty->registerPlugin("modifier", "date_format_tz", "smarty_modifier_date_format_tz");
 
-// do we have any notification methods?
-if (empty(SMTP_HOST) && empty(PUSHOVER_TOKEN)) die;
-
 // load users
 $users = readUsers();
 
@@ -88,8 +85,8 @@ while($i < count($users)){
                         }
 
                         // send a pushover
-                        if (!empty(PUSHOVER_TOKEN)){
-                            pushover('Your activity '.$activities[$j]['activityName']. ' is due to be triggered soon in '.formatTime($timeToNextTrigger, 0), PUSHOVER_TOKEN, PUSHOVER_USER);  
+                        if (!empty($users[$i]['pushoverToken'])){
+                            pushover('Your activity '.$activities[$j]['activityName']. ' is due to be triggered soon in '.formatTime($timeToNextTrigger, 0), $users[$i]['pushoverToken'], $users[$i]['pushoverUser']);  
                         }
 
                         // set the notification trigger so it doesn't happen again this trigger

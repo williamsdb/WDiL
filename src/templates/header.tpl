@@ -103,7 +103,15 @@
 					{if $smarty.const.ADMIN == $smarty.session.username}
 						<li class="nav-item"><a href="/admin" class="nav-link">Admin</a></li>
 					{/if}
-					<li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+					<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+					  <i class="bi bi-person"></i>
+					</a>
+					<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+					  <li><a class="dropdown-item" href="/account">Account</a></li>
+					  <li><a class="dropdown-item" href="/logout">Logout</a></li>
+					</ul>
+				  </li>
 				</ul>
 			{/if}
 		</header>

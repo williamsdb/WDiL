@@ -17,9 +17,5 @@
     define("SMTP_USER", "");
     define("SMTP_PASS", "");
     define("SMTP_PORT", "");
-
-    // Pushover keys - leave blank if not using
-    define("PUSHOVER_TOKEN", "");
-    define("PUSHOVER_USER", "");  
     
 ?>

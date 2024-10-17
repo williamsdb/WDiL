@@ -1,5 +1,7 @@
 {include file="header.tpl"}
 
+<h3>Admin</h3>
+
 <table class="table table-striped">
 <thead>
 	<tr>
