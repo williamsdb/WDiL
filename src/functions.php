@@ -137,7 +137,7 @@ use PHPMailer\PHPMailer\Exception;
         $months = $days / 30.44; // approximate months
         $years = $days / 365.25; // approximate years
 
-        if ($years == 1) {
+        if ($years >= 1 && $years < 2) {
             if ($label){
                 return round($years, $round) . ' year';
             }else{
@@ -149,7 +149,7 @@ use PHPMailer\PHPMailer\Exception;
             }else{
                 return round($years, $round);
             }
-        } elseif ($months == 1) {
+        } elseif ($months >= 1 && $months < 2) {
             if ($label){
                 return round($months, $round) . ' month';
             }else{
@@ -161,7 +161,7 @@ use PHPMailer\PHPMailer\Exception;
             }else{
                 return round($months, $round);
             }
-        } elseif ($days == 1) {
+        } elseif ($days >= 1 && $days < 2) {
             if ($label){
                 return round($days, $round) . ' day';
             }else{
@@ -173,7 +173,7 @@ use PHPMailer\PHPMailer\Exception;
             }else{
                 return round($days, $round);
             }
-        } elseif ($hours == 1) {
+        } elseif ($hours >= 1 && $hours < 2) {
             if ($label){
                 return round($hours, $round) . ' hour';
             }else{
@@ -185,7 +185,7 @@ use PHPMailer\PHPMailer\Exception;
             }else{
                 return round($hours, $round);
             }
-        } elseif ($minutes == 1) {
+        } elseif ($minutes >= 1 && $minutes <2) {
             if ($label){
                 return round($minutes, $round) . ' minute';
             }else{
@@ -197,7 +197,7 @@ use PHPMailer\PHPMailer\Exception;
             }else{
                 return round($minutes, $round);
             }
-        } elseif ($seconds == 1) {
+        } elseif ($seconds >= 1 && $seconds < 2) {
             if ($label){
                 return round($seconds, $round) . ' second';
             }else{

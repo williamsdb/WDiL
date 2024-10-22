@@ -347,9 +347,13 @@ switch ($cmd) {
             $enpt = $enp - time();
 
             if ($enpt < 0){
-                $smarty->assign('enp', smarty_modifier_date_format_tz($enp, "Y-m-d H:i:s", TZ).' <span style="color: red">overdue by '.formatTime(time()- $enp, 0).'</span>');
+                $enpx = '<span style="color: red">overdue by '.formatTime(time()- $enp, 0).'</span>';
+                $smarty->assign('enp', smarty_modifier_date_format_tz($enp, "Y-m-d H:i:s", TZ).' '.$enpx);
+                $smarty->assign('enpx', $enpx);
             }else{
-                $smarty->assign('enp', smarty_modifier_date_format_tz($enp, "Y-m-d H:i:s", TZ).' in '.formatTime($enpt, 0));
+                $enpx = ' in '.formatTime($enpt, 0);
+                $smarty->assign('enp', smarty_modifier_date_format_tz($enp, "Y-m-d H:i:s", TZ).$enpx);
+                $smarty->assign('enpx', 'due '.$enpx);
             }
     
             $smarty->assign('avg', formatTime($averageInterval, 0));
