@@ -114,6 +114,12 @@
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td>{$smarty.now|date_format_tz:"Y-m-d H:i:s":$smarty.const.TZ} (Now)</td>
+            <td>&nbsp;</td>
+            <td>{$elp}</td>
+            <td>&nbsp;</td>
+        </tr>
         {foreach from=$triggersReversed key=i item=trigger name=foo}
             {if $smarty.foreach.foo.index == 10}
             {break}
