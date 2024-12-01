@@ -6,7 +6,7 @@ use PHPMailer\PHPMailer\Exception;
     function readActivities($database) {
         // Read the activities database
         try {
-            $activities = file_get_contents('./databases/'.$database);
+            $activities = file_get_contents(__DIR__.'/databases/'.$database);
         } catch (\Throwable $th) {
             die('Database file not found. Have you created it?');
         }
@@ -16,7 +16,7 @@ use PHPMailer\PHPMailer\Exception;
     function writeActivities($activities, $database) {
         // write the activities to the database file
         try {
-            file_put_contents('./databases/'.$database,serialize($activities));
+            file_put_contents(__DIR__.'/databases/'.$database,serialize($activities));
         } catch (\Throwable $th) {
             die('Database file not found. Have you created it?');
         }
@@ -25,7 +25,7 @@ use PHPMailer\PHPMailer\Exception;
     function readUsers() {
         // Read the users database
         try {
-            $users = file_get_contents('./users.db');
+            $users = file_get_contents(__DIR__.'/users.db');
         } catch (\Throwable $th) {
             die('Database file not found. Have you created it?');
         }
@@ -35,7 +35,7 @@ use PHPMailer\PHPMailer\Exception;
     function writeUsers($users) {
         // write the users to the database file
         try {
-            file_put_contents('./users.db',serialize($users));
+            file_put_contents(__DIR__.'/users.db',serialize($users));
         } catch (\Throwable $th) {
             die('Database file not found. Have you created it?');
         }
@@ -68,7 +68,7 @@ use PHPMailer\PHPMailer\Exception;
 
         // write a line to the log file
         try {
-            file_put_contents('./logs.db', date("Y-m-d H:i:s").','.'"'.$string.'"'.PHP_EOL, FILE_APPEND);
+            file_put_contents(__DIR__.'/logs.db', date("Y-m-d H:i:s").','.'"'.$string.'"'.PHP_EOL, FILE_APPEND);
         } catch (\Throwable $th) {
             die('logs.db file not found. Have you created it?');
         }
@@ -217,13 +217,13 @@ use PHPMailer\PHPMailer\Exception;
 
         try {
             //Server settings
-//            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            $mail->SMTPDebug = SMTP::DEBUG_CONNECTION;
             $mail->isSMTP();
             $mail->Host       = SMTP_HOST;
             $mail->SMTPAuth   = true;
             $mail->Username   = SMTP_USER;
             $mail->Password   = SMTP_PASS;
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->SMTPSecure = SMTP_SECURE;
             $mail->Port       = SMTP_PORT;
         
             //Recipients

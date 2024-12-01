@@ -20,13 +20,13 @@ error_reporting(0);
 ini_set('display_errors', 0);
 
 // Load Composer & parameters
-require 'vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 try {
-    require 'config.php';
+    require __DIR__.'/config.php';
 } catch (\Throwable $th) {
     die('config.php file not found. Have you renamed from config_dummy.php?');
 }
-require 'functions.php';
+require __DIR__.'/functions.php';
 
 // set up namespaces
 use Smarty\Smarty;
@@ -55,7 +55,7 @@ while($i < count($users)){
         while($j < count($activities)){
 
             // does it have notifications set?
-            if (isset($activities[$j]['notifications']) && $activities[$j]['notifications']){
+            if (isset($activities[$j]['notifications']) && $activities[$j]['notifications'] && (isset($activities[$j]['archived']) && $activities[$j]['archived'] != 1) || !isset($activities[$j]['archived'])){
                 if (count($activities[$j]['triggers'])>1){
 
                     // has this already been triggered?
@@ -71,14 +71,15 @@ while($i < count($users)){
                     $lastTrigger = $activities[$j]['triggers'][count($activities[$j]['triggers'])-1]['timestamp'];
                     $nextTrigger =  $lastTrigger + $averageInterval;
                     $timeToNextTrigger = $nextTrigger - time();
+                    $perc = number_format((($averageInterval-$timeToNextTrigger)/$averageInterval)*100);
 
-                    // is the next trigger in the future and > 90% of the average interval? 
-                    if ($timeToNextTrigger > 0 && ($timeToNextTrigger < ($averageInterval * 0.1))){
+                    // is the next trigger in the future and > 90% of the average interval? (or whatever the THRESHOLD is set to in config)
+                    if ($timeToNextTrigger > 0 && $perc >= THRESHOLD){
                         //send an email
                         if (!empty(SMTP_HOST)){
                             $data['activityName'] = $activities[$j]['activityName'];
                             $data['dueIn'] = formatTime($timeToNextTrigger, 0);
-                            $body = $smarty->fetch('email-notification.tpl', $data);
+                            $body = $smarty->fetch(__DIR__.'/templates/email-notification.tpl', $data);
                 
                             // send email
                             sendMail($users[$i]['email'], 'WDiL Notification', $body);
@@ -86,7 +87,7 @@ while($i < count($users)){
 
                         // send a pushover
                         if (!empty($users[$i]['pushoverToken'])){
-                            pushover('Your activity '.$activities[$j]['activityName']. ' is due to be triggered soon in '.formatTime($timeToNextTrigger, 0), $users[$i]['pushoverToken'], $users[$i]['pushoverUser']);  
+                            pushover('Your activity '.$activities[$j]['activityName']. ' is due to be triggered in '.formatTime($timeToNextTrigger, 0), $users[$i]['pushoverToken'], $users[$i]['pushoverUser']);  
                         }
 
                         // set the notification trigger so it doesn't happen again this trigger

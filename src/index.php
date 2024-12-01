@@ -23,13 +23,13 @@ ini_set('display_errors', 0);
 session_start();
 
 // Load Composer & parameters
-require 'vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 try {
-    require 'config.php';
+    require __DIR__.'/config.php';
 } catch (\Throwable $th) {
     die('config.php file not found. Have you renamed from config_dummy.php?');
 }
-require 'functions.php';
+require __DIR__.'/functions.php';
 
 // set up namespaces
 use Smarty\Smarty;
@@ -78,6 +78,7 @@ switch ($cmd) {
     case 'database':
 
         $smarty->assign('list', array_to_html($_SESSION['activities'], TRUE));
+        $smarty->assign('header', 'Activities Database');
         $smarty->display('list.tpl');
         die;
 
@@ -662,6 +663,60 @@ switch ($cmd) {
         $smarty->assign('minTimestamp', $minTimestampStr);
         $smarty->assign('notTriggered', $notTriggered);
         $smarty->display('stats.tpl');
+        break;
+
+    case 'notifications':
+
+        // load users
+        $users = readUsers();
+
+        // initialise output
+        $list = '';
+
+        // cycle through all users
+        $i = 0;
+        while($i < count($users)){
+
+            // load database
+            $activities = readActivities($users[$i]['username'].'.db');
+
+            // cycle through all activities
+            if (!empty($activities)){
+                $j = 0;
+                while($j < count($activities)){
+
+                    // does it have notifications set?
+                    if (isset($activities[$j]['notifications']) && $activities[$j]['notifications'] && $activities[$j]['archived'] != 1){
+                        if (count($activities[$j]['triggers'])>1){
+
+                            // has this already been triggered?
+                            if (isset($activities[$j]['notificationTriggered']) && $activities[$j]['notificationTriggered']) break;
+
+                            // Calculate intervals between consecutive timestamps
+                            $intervals = calculateIntervals($activities[$j]);
+
+                            // Calculate the average interval
+                            $averageInterval = array_sum($intervals) / count($intervals);
+
+                            // calculate the next trigger
+                            $lastTrigger = $activities[$j]['triggers'][count($activities[$j]['triggers'])-1]['timestamp'];
+                            $nextTrigger =  $lastTrigger + $averageInterval;
+                            $timeToNextTrigger = $nextTrigger - time();
+                            $perc = number_format((($averageInterval-$timeToNextTrigger)/$averageInterval)*100);
+
+                            $list .= '<strong><u>'.$activities[$j]['activityName'].'</u></strong><br>';
+                            $list .= 'Is '.$perc.'% through before next trigger is due<br>&nbsp;<br>';                            
+                        }
+                    }
+                    $j++;
+                }    
+            }
+            $i++;
+        }
+
+        $smarty->assign('list', $list);
+        $smarty->assign('header', 'Upcoming Notifications');
+        $smarty->display('list.tpl');
         break;
 
     case '':
