@@ -391,9 +391,9 @@ switch ($cmd) {
         // if user found set database
         $users = readUsers();
         if (strpos($_REQUEST['username'],'@')){
-            $id = searchEmail($users, $_REQUEST['username']);
+            $id = searchEmail($users, strtolower($_REQUEST['username']));
         }else{
-            $id = searchUsername($users, $_REQUEST['username']);
+            $id = searchUsername($users, strtolower($_REQUEST['username']));
         }
 
         if ($id == -1){

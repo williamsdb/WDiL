@@ -43,7 +43,7 @@ use PHPMailer\PHPMailer\Exception;
 
     function searchUsername($users, $username) {
         foreach ($users as $key => $user) {
-            if ($user['username'] === $username) {
+            if (strtolower($user['username']) === $username) {
                 return $key;  // Return the id (index) of the matching entry
             }
         }
@@ -53,7 +53,7 @@ use PHPMailer\PHPMailer\Exception;
 
     function searchEmail($users, $email) {
         foreach ($users as $key => $user) {
-            if ($user['email'] === $email) {
+            if (strtolower($user['email']) === $email) {
                 return $key;  // Return the id (index) of the matching entry
             }
         }
@@ -217,7 +217,7 @@ use PHPMailer\PHPMailer\Exception;
 
         try {
             //Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_CONNECTION;
+            //$mail->SMTPDebug = SMTP::DEBUG_CONNECTION;
             $mail->isSMTP();
             $mail->Host       = SMTP_HOST;
             $mail->SMTPAuth   = true;
