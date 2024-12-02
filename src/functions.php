@@ -8,6 +8,7 @@ use PHPMailer\PHPMailer\Exception;
         try {
             $activities = file_get_contents(__DIR__.'/databases/'.$database);
         } catch (\Throwable $th) {
+            debug('Database file not found. Have you created it?');
             die('Database file not found. Have you created it?');
         }
         return unserialize($activities);
@@ -18,6 +19,7 @@ use PHPMailer\PHPMailer\Exception;
         try {
             file_put_contents(__DIR__.'/databases/'.$database,serialize($activities));
         } catch (\Throwable $th) {
+            debug('Database file not found. Have you created it?');
             die('Database file not found. Have you created it?');
         }
     }
@@ -27,7 +29,8 @@ use PHPMailer\PHPMailer\Exception;
         try {
             $users = file_get_contents(__DIR__.'/users.db');
         } catch (\Throwable $th) {
-            die('Database file not found. Have you created it?');
+            debug('Users file not found. Have you created it?');
+            die('Users file not found. Have you created it?');
         }
         return unserialize($users);
     }
@@ -37,7 +40,8 @@ use PHPMailer\PHPMailer\Exception;
         try {
             file_put_contents(__DIR__.'/users.db',serialize($users));
         } catch (\Throwable $th) {
-            die('Database file not found. Have you created it?');
+            debug('Users file not found. Have you created it?');
+            die('Users file not found. Have you created it?');
         }
     }
 
