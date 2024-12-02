@@ -172,7 +172,7 @@ Bluesky - [@spokenlikeageek.com](https://bsky.app/profile/spokenlikeageek.com)
 
 Mastodon - [@spokenlikeageek](https://techhub.social/@spokenlikeageek)
 
-Website - [https://spokenlikeageek.com] (https://www.spokenlikeageek.com/tag/when-did-i-last/)
+Website - [Project posts] (https://www.spokenlikeageek.com/tag/when-did-i-last/)
 
 
 Project link - [Github](https://github.com/williamsdb/WDiL)
