@@ -93,7 +93,6 @@ Requirements are very simple, it requires the following:
 
 You must install the dependencies, create some required files and set the appropriate permissions. This is what I did but you may need to adjust depending on your flavour of OS:
 
-1. Clone the repo:
 1. ```git clone https://github.com/williamsdb/WDiL```
 2. ```cd WDiL\src```
 1. ```mkdir vendor```

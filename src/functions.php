@@ -217,7 +217,7 @@ use PHPMailer\PHPMailer\Exception;
 
         try {
             //Server settings
-            //$mail->SMTPDebug = SMTP::DEBUG_CONNECTION;
+            $mail->SMTPDebug = SMTP::DEBUG_OFF;
             $mail->isSMTP();
             $mail->Host       = SMTP_HOST;
             $mail->SMTPAuth   = true;
