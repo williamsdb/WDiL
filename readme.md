@@ -46,7 +46,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-My electric toothbrush seems to be running out of charge quicker and quicker but is it or am I just misremembering when I last charged it? WDiL aims to help solve those sorts of problems by allowing you to record every time you do something and then see stats on things such as frequency and average interval. 
+My electric toothbrush seems to be running out of charge quicker and quicker but is it or am I just misremembering when I last charged it? WDiL aims to help solve those sorts of problems by allowing you to record every time you do something and then see stats on things such as frequency and average interval.
+
+![](https://www.spokenlikeageek.com/wp-content/uploads/2024/09/2024-09-14-15-40-48.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -55,8 +57,9 @@ My electric toothbrush seems to be running out of charge quicker and quicker but
 ### Built With
 
 * [PHP](https://php.net)
-* [simple.css](https://simplecss.org/)
+* [Boostrap](https://getbootstrap.com/)
 * [smarty](https://github.com/smarty-php/smarty)
+* [phpMailer](https://github.com/PHPMailer/PHPMailer)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -65,13 +68,16 @@ My electric toothbrush seems to be running out of charge quicker and quicker but
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Running the script is very straightforward:
+Getting up and running is very straightforward:
 
 1. download the code/clone the repository
 2. install [composer](https://getcomposer.org/)
-3. add the smarty templating engine
+3. add the smarty templating engine and phpMailer
     
     > composer.phar require smarty/smarty
+    
+    > composer.phar require PHPMailer/PHPMailer
+4. follow the installation instructions below.
 
 
 You can read more about how it all works in [these blog posts](https://www.spokenlikeageek.com/tag/when-did-i-last/).
@@ -88,10 +94,11 @@ Requirements are very simple, it requires the following:
 You must install the dependencies, create some required files and set the appropriate permissions. This is what I did but you may need to adjust depending on your flavour of OS:
 
 1. Clone the repo:
-   ```sh
-   git clone https://github.com/williamsdb/WDiL
-   ```
+1. ```git clone https://github.com/williamsdb/WDiL```
+2. ```cd WDiL\src```
+1. ```mkdir vendor```
 2. ```php composer.phar require smarty/smarty```
+3. ```php composer.phar require PHPMailer/PHPMailer```
 3. ```sudo mkdir templates_c```
 4. ```sudo chown apache:apache templates_c -R```
 5. ```sudo chcon -R -t httpd_sys_rw_content_t templates_c```
@@ -160,9 +167,16 @@ Distributed under the GNU General Public License v3.0. See `LICENSE` for more in
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@spokenlikeageek](https://twitter.com/spokenlikeageek) - [Contact](https://www.spokenlikeageek.com/contact/)
+X - [@spokenlikeageek](https://x.com/spokenlikeageek) 
 
-Project Link: [https://spokenlikeageek.com] (https://www.spokenlikeageek.com/tag/when-did-i-last/)
+Bluesky - [@spokenlikeageek.com](https://bsky.app/profile/spokenlikeageek.com)
+
+Mastodon - [@spokenlikeageek](https://techhub.social/@spokenlikeageek)
+
+Website - [https://spokenlikeageek.com] (https://www.spokenlikeageek.com/tag/when-did-i-last/)
+
+
+Project link - [Github](https://github.com/williamsdb/WDiL)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
