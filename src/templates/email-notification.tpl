@@ -1,4 +1,4 @@
-{include file="email-header.tpl"}
+{include file="/templates/email-header.tpl"}
 
     <!-- start hero -->
     <tr>
@@ -89,4 +89,4 @@
     </tr>
     <!-- end copy block -->
 
-{include file="email-footer.tpl"}
+{include file="/templates/email-footer.tpl"}
