@@ -59,7 +59,7 @@ while($i < count($users)){
                 if (count($activities[$j]['triggers'])>1){
 
                     // has this already been triggered?
-                    if (isset($activities[$j]['notificationTriggered']) && $activities[$j]['notificationTriggered']) break;
+                    if (isset($activities[$j]['notificationTriggered']) && $activities[$j]['notificationTriggered']==1) break;
 
                     // Calculate intervals between consecutive timestamps
                     $intervals = calculateIntervals($activities[$j]);
@@ -71,10 +71,12 @@ while($i < count($users)){
                     $lastTrigger = $activities[$j]['triggers'][count($activities[$j]['triggers'])-1]['timestamp'];
                     $nextTrigger =  $lastTrigger + $averageInterval;
                     $timeToNextTrigger = $nextTrigger - time();
-                    $perc = number_format((($averageInterval-$timeToNextTrigger)/$averageInterval)*100);
+                    $perc = number_format((($averageInterval-$timeToNextTrigger)/$averageInterval)*100, 0, '.', '');
 
                     // is the next trigger in the future and > 90% of the average interval? (or whatever the THRESHOLD is set to in config)
+
                     if ($timeToNextTrigger > 0 && $perc >= THRESHOLD){
+
                         //send an email
                         if (!empty(SMTP_HOST)){
                             $data['activityName'] = $activities[$j]['activityName'];
@@ -91,7 +93,7 @@ while($i < count($users)){
                         }
 
                         // set the notification trigger so it doesn't happen again this trigger
-                        $activities[$j]['notificationTriggered'] = TRUE;
+                        $activities[$j]['notificationTriggered'] = 1;
                         writeActivities($activities, $users[$i]['username'].'.db');
 
                     }
