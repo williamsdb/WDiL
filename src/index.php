@@ -690,7 +690,8 @@ switch ($cmd) {
                         if (count($activities[$j]['triggers'])>1){
 
                             // has this already been triggered?
-                            if (isset($activities[$j]['notificationTriggered']) && $activities[$j]['notificationTriggered']) break;
+                            $alreadyTriggered=FALSE;
+                            if (isset($activities[$j]['notificationTriggered']) && $activities[$j]['notificationTriggered']) $alreadyTriggered=TRUE;
 
                             // Calculate intervals between consecutive timestamps
                             $intervals = calculateIntervals($activities[$j]);
@@ -705,8 +706,12 @@ switch ($cmd) {
                             $perc = number_format((($averageInterval-$timeToNextTrigger)/$averageInterval)*100);
 
                             $list .= '<strong><u>'.$activities[$j]['activityName'].'</u></strong><br>';
-                            $list .= 'Is '.$perc.'% through before next trigger is due<br>&nbsp;<br>';                            
-                        }
+                            if ($perc >= THRESHOLD && $alreadyTriggered){
+                                $list .= 'Is '.$perc.'% through before next trigger is due (triggered)<br>&nbsp;<br>';                            
+                            }else{
+                                $list .= 'Is '.$perc.'% through before next trigger is due<br>&nbsp;<br>';                            
+                            }
+                            }
                     }
                     $j++;
                 }    
