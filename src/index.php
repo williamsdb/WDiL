@@ -705,7 +705,7 @@ switch ($cmd) {
                             $timeToNextTrigger = $nextTrigger - time();
                             $perc = number_format((($averageInterval-$timeToNextTrigger)/$averageInterval)*100);
 
-                            $list .= '<strong><u>'.$activities[$j]['activityName'].'</u></strong><br>';
+                            $list .= '<strong><u><a href="/statsActivity/'.$j.'">'.$activities[$j]['activityName'].'</a></u></strong><br>';
                             if ($perc > 100){
                                 $list .= 'Overdue<br>&nbsp;<br>';                            
                             }elseif ($perc >= THRESHOLD && $alreadyTriggered){
