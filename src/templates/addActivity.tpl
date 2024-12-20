@@ -46,7 +46,7 @@
     <label for="notification" class="form-label">Send Notifications?</label>
     <input type="checkbox" name="notifications" class="cm-toggle">
     </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary" id="addSave">Save</button>
 
 </form>
 
