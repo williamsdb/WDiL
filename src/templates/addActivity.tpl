@@ -46,7 +46,8 @@
     <label for="notification" class="form-label">Send Notifications?</label>
     <input type="checkbox" name="notifications" class="cm-toggle">
     </div>
-    <button type="submit" class="btn btn-primary" id="addSave">Save</button>
+    <button type="submit" class="btn btn-primary" id="addSave" name="addSave" value="addSave">Save</button>
+    <button type="submit" class="btn btn-primary" id="addSaveTrigger" name="addSaveTrigger" value="addSaveTrigger">Save & Trigger</button>
 
 </form>
 

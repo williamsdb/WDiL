@@ -122,6 +122,10 @@ switch ($cmd) {
 
     case 'createActivity':
 
+        // check to see which button was pressed and action
+    	$btnSave = isset($_POST['addSave']) ? $_POST['addSave'] : '';
+    	$btnSaveTrigger = isset($_POST['addSaveTrigger']) ? $_POST['addSaveTrigger'] : '';
+
         // is this the first activity?
         if (!isset($_SESSION['activities']) || !is_array($_SESSION['activities'])) {
             $_SESSION['activities'] = array();
@@ -148,6 +152,14 @@ switch ($cmd) {
                 $_SESSION['activities'][$i]['notifications'] = FALSE;
             }
             $_SESSION['activities'][$i]['notificationTriggered'] = FALSE;
+        }
+
+        // if the Save & Trigger button has been pressed then add the trigger
+        if (!empty($btnSaveTrigger)){
+            // convert time to GMT/UTC and add to array
+            $timezoneOffset = timezone_offset_get(new DateTimeZone(TZ), new DateTime());
+            $_SESSION['activities'][$i]['triggers'][0]['timestamp'] = strtotime(date("Y-m-d H:i:s"))-$timezoneOffset;
+            $_SESSION['activities'][$i]['triggers'][0]['comment'] = '';
         }
 
         // store the activities in the activities database file
